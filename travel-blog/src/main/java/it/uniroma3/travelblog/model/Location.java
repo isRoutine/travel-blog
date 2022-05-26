@@ -5,12 +5,25 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import org.hibernate.validator.constraints.UniqueElements;
+
 @Entity
 public class Location {
 
 	@Id 
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
+	
+	@UniqueElements
+	private String nation;
+	
+	@UniqueElements
+	private String state;
+	
+	@UniqueElements
+	private String country;
+	
+	
 	
 	public long getId() {
 		return id;
