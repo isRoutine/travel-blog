@@ -44,7 +44,7 @@ public class User {
 	@UniqueElements
 	private String email;
 	
-	@OneToMany
+	@OneToMany(mappedBy = "user")
 	private List<Experience> experiences;
 	
 	
