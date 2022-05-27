@@ -16,10 +16,10 @@ public class Experience {
 	
 	@Id 
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private long id;
+	private Long id;
 
 	@Column(length = sLength)
-	private String desc;
+	private String description;
 	
 	@Min(0)
 	@Max(5)

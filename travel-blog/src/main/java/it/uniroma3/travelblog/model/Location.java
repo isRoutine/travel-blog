@@ -12,7 +12,7 @@ public class Location {
 
 	@Id 
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private long id;
+	private Long id;
 	
 	@UniqueElements
 	private String nation;
