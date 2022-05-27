@@ -1,13 +1,18 @@
 package it.uniroma3.travelblog.model;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
+import javax.persistence.OneToMany;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Entity
 public class Experience {
@@ -21,21 +26,62 @@ public class Experience {
 	@Column(length = sLength)
 	private String description;
 	
-	@Min(0)
-	@Max(5)
-	private Integer rate; //selfRate o userRate??
+	@NotBlank
+	@NotNull
+	private LocalDateTime creationTime;
+	
+	@OneToMany
+	private List<Image> imgs;
 	
 	@ManyToOne
 	private Location location;
 	
 	
-	public long getId() {
+	
+	public Experience() {
+		this.imgs = new ArrayList<Image>();
+	}
+
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public LocalDateTime getCreationTime() {
+		return creationTime;
+	}
+
+	public void setCreationTime(LocalDateTime creationTime) {
+		this.creationTime = creationTime;
+	}
+
+	public List<Image> getImg() {
+		return imgs;
+	}
+
+	public void setImg(List<Image> imgs) {
+		this.imgs = imgs;
+	}
+
+	public Location getLocation() {
+		return location;
+	}
+
+	public void setLocation(Location location) {
+		this.location = location;
+	}
+	
 	
 	
 }
