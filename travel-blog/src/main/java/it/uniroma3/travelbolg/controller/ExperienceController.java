@@ -1,5 +1,7 @@
 package it.uniroma3.travelbolg.controller;
 
+import java.time.LocalDateTime;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import it.uniroma3.travelblog.model.Experience;
 import it.uniroma3.travelblog.model.Image;
+import it.uniroma3.travelblog.model.User;
 import it.uniroma3.travelblog.service.ExperienceService;
 
 @Controller
@@ -24,13 +27,15 @@ public class ExperienceController {
 	private ExperienceService expService;
 	
 	/*
-	 * manca il controllo degli errori con validator
+	 * serve in qualche modo avere riferimento dell'user che la ha creata
 	 * */
 	@PostMapping("/exp")
-	public String addExperience(@Valid @ModelAttribute("experience") Experience exp, @RequestParam("file") MultipartFile file, BindingResult bindingResult) {
+	public String addExperience(@Valid @ModelAttribute("experience") Experience exp, @RequestParam("file") MultipartFile[] files, BindingResult bindingResult) {
 		
 		if(!bindingResult.hasErrors()) {
-			exp.addImage(new Image(file));
+			for(MultipartFile file: files) {
+				exp.addImage(new Image(file));
+			}
 			this.expService.save(exp);
 			return "expereince.html";
 		}
@@ -50,9 +55,18 @@ public class ExperienceController {
 		return "index.html";
 	}
 	
+	
+	/*
+	 * suppongo di avere l'attributo user già nel modello
+	 * si potrebbe migliorare scaricando le responsabilità di user
+	 */
 	@GetMapping("/expereinceForm")
 	public String expereinceForm(Model model) {
-		model.addAttribute("expereince", new Experience());
+		Experience exp =  new Experience();
+		exp.setCreationTime(LocalDateTime.now());
+		exp.setUser((User)model.getAttribute("user"));
+	
+		model.addAttribute("expereince",exp);
 		return "expereince.html";
 	}
 	
