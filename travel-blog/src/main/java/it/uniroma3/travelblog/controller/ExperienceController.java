@@ -31,6 +31,10 @@ public class ExperienceController {
 	@Autowired
 	private UserService userService;
 	
+	private String getDirectoryName(Experience exp) {
+		return exp.getUser().getName()+ "_" +exp.getUser().getSurname()+ "/" + exp.getName();
+	}
+	
 	/*
 	 * serve in qualche modo avere riferimento dell'user che la ha creata
 	 * */
@@ -39,7 +43,7 @@ public class ExperienceController {
 		if(!bindingResult.hasErrors()) {
 			int i=0;
  			for(MultipartFile file : files) {
- 				exp.getImgs()[i] = FileStorer.store(file,  exp.getUser().getName() +"_"+ exp.getUser().getSurname()+ "/" + exp.getName());
+ 				exp.getImgs()[i] = FileStorer.store(file,  getDirectoryName(exp));
  				i++;
 			}
  			
@@ -57,7 +61,7 @@ public class ExperienceController {
 	}
 	
 	@GetMapping("/all")
-	public String getBuffets(Model model) {
+	public String getExperiences(Model model) {
 		model.addAttribute("experience", this.expService.findAll());
 		return "/experience/all";
 	}
@@ -65,9 +69,25 @@ public class ExperienceController {
 	@GetMapping("/delete/{id}")
 	public String deleteExperience(@PathVariable("id") Long id, Model model) {
 		Experience exp = this.expService.findById(id);
-		FileStorer.removeImgsAndDir(exp.getUser().getName()+ "_" +exp.getUser().getSurname()+ "/" + exp.getName(), exp.getImgs());
+		FileStorer.removeImgsAndDir(getDirectoryName(exp), exp.getImgs());
 		this.expService.deleteById(id);
 		return "index.html";
+	}
+	
+	@GetMapping("/delete/{id}/{img}")
+	public String deleteImage(@PathVariable("id") Long id, @PathVariable("img") String img, Model model) {
+		Experience exp = this.expService.findById(id);
+		for(String currImg : exp.getImgs()) {
+			if(currImg != null && currImg.equals(img)) {
+				exp.removeImg(img);
+				FileStorer.removeImg(getDirectoryName(exp), img);
+			}
+			
+		}
+			
+		this.expService.save(exp);
+		model.addAttribute("expereince", this.expService.findById(id));
+		return "experience/modify";
 	}
 	
 	
@@ -92,25 +112,25 @@ public class ExperienceController {
 	}
 	
 	@PostMapping("/modify")
-	public String experienceUpdate(@Valid @ModelAttribute("buffet")Experience exp, @RequestParam("files")MultipartFile[] files, BindingResult bindingResult, Model model) {
+	public String experienceUpdate(@Valid @ModelAttribute("experience")Experience exp, @RequestParam("files")MultipartFile[] files, BindingResult bindingResult, Model model) {
 		if(!bindingResult.hasErrors()) {
 			if (files != null) {
-				FileStorer.dirEmpty(exp.getUser().getName()+ "_" +exp.getUser().getSurname()+ "/" + exp.getName());
+				FileStorer.dirEmpty(getDirectoryName(exp));
+				exp.emptyImgst();
 				int i=0;
 				for(MultipartFile file : files) {
 					if(!file.isEmpty()) {
-						exp.getImgs()[i]= FileStorer.store(file, exp.getUser().getName()+ "_" +exp.getUser().getSurname()+ "/" + exp.getName());
+						exp.getImgs()[i]= FileStorer.store(file, getDirectoryName(exp));
 						i++;
 					}
 				}
 			}
 			
 			this.expService.save(exp);
-			model.addAttribute("buffet", this.expService.findById(exp.getId()));
-			return "/experience/info";
+			model.addAttribute("expereince", this.expService.findById(exp.getId()));
+			return "/expereince/info";
 		}
 		else return "/experience/modify";
 	}
-	
 	
 }

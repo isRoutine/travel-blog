@@ -100,5 +100,15 @@ public class Experience {
 		this.name = name;
 	}
 	
+	public void emptyImgst() {
+		this.imgs = new String[MAX_IMGS];
+	}
+
+	public void removeImg(String img) {
+		for(int i = 0; i < this.imgs.length; i++) {
+			if(this.imgs[i] != null && this.imgs[i].equals(img)) this.imgs[i]=null;
+		}
+	}
+	
 	
 }
