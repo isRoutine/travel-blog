@@ -1,37 +1,28 @@
 <!DOCTYPE html>
-<html>
+<meta charset="UTF-8" />
+<html xmlns:th="http://www.thymeleaf.org" lang="it">
 <head>
-	<meta charset="UTF-8" />
-	<link href="../static/index.css" rel="stylesheet">
-	<title>Travel-blog</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Travel-blog home page</title>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
 </head>
 <body>
-	<header>
-		
-	</header>
-
-	<div class="login form">
-		<h2>Login</h2>
-		<form th:action = "@{/persona}" method="get" th:object = "${persona}">
-			<div th:if="${#fields.hasGlobalErrors()}">
-				<p th:each="err : ${#fields.globalErrors()}" th:text="${err}">...</p> 
-			</div>
-			<div>
-				<span> email <input type="text" th:field="*{email}" placeholder="email" /> </span>
-				<span th:if="${#fields.hasErrors('email')}" th:errors="*{email}"> </span>
-			</div>
-
-			<div>
-				<span> password:<input type="password" th:field="*{password}" placeholder="password" /> </span>
-				<span th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>
-			</div>
-
-			<div>
-				<span class="button"> <a th:href="@{'/login'}" th:text="Login">Login</a> </span>
-				<span class="button"> <a th:href="@{'/toSignUp'}" th:text="Sign-Up">Sign-Up</a> </span>
-			</div>
-
-		</form>
-	</div>
+	<form>
+		<div class="mb-3">
+			<label for="exampleInputEmail1" class="form-label">Email address</label>
+			<input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+			<div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+		</div>
+		<div class="mb-3">
+			<label for="exampleInputPassword1" class="form-label">Password</label>
+			<input type="password" class="form-control" id="exampleInputPassword1">
+		</div>
+		<div class="mb-3 form-check">
+			<input type="checkbox" class="form-check-input" id="exampleCheck1">
+			<label class="form-check-label" for="exampleCheck1">Check me out</label>
+		</div>
+		<button type="submit" class="btn btn-primary">Submit</button>
+	</form>
 </body>
 </html>

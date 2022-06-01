@@ -1,4 +1,4 @@
-package it.uniroma3.travelbolg.controller;
+package it.uniroma3.travelblog.controller;
 
 import java.time.LocalDateTime;
 

@@ -24,10 +24,10 @@ public class UserController {
 	 * Aggiungo al model un nuovo user nel quale 
 	 * memorizzero' i valori ricevuti dalla form
 	 */
-	@GetMapping("/addUserForm")
+	@GetMapping("/user/form")
 	public String addUserForm(Model model) {
 		model.addAttribute(new User());
-		return null;
+		return "login.html";
 	}
 	
 	/* Aggiunta di un user al DB
