@@ -12,11 +12,13 @@ public class FileStorer {
 
 	public static String uploadDirectory = System.getProperty("user.dir")+"/src/main/resources/static/images/";
 	
-	
+	private static String setupDirName(String owner) {
+		return uploadDirectory+(owner.strip());
+	}
 	
 	public static String store(MultipartFile file, String owner) {
-		new File(uploadDirectory+owner).mkdir();
-		Path fileNameAndPath  = Paths.get(uploadDirectory+owner, file.getOriginalFilename());
+		new File(setupDirName(owner)).mkdir();
+		Path fileNameAndPath  = Paths.get(setupDirName(owner), file.getOriginalFilename());
 		try {
 			Files.write(fileNameAndPath, file.getBytes());
 			
@@ -27,7 +29,7 @@ public class FileStorer {
 	}
 	
 	public static void removeImg(String owner, String name) {
-		Path fileNameAndPath  = Paths.get(uploadDirectory+owner+"/"+name);
+		Path fileNameAndPath  = Paths.get(setupDirName(owner)+"/"+name);
 		try {
 			Files.delete(fileNameAndPath);
 		} catch (IOException e) {
@@ -52,11 +54,11 @@ public class FileStorer {
 	}
 	
 	private static void removeDirectory(String owner) {
-		new File(uploadDirectory+owner).delete();
+		new File(setupDirName(owner)).delete();
 	}
 	
 	public static void dirEmpty(String owner) {
-		for(File file : new File(uploadDirectory+owner).listFiles()) {
+		for(File file : new File(setupDirName(owner)).listFiles()) {
 			file.delete();
 		}
 	}

@@ -84,5 +84,33 @@ public class ExperienceController {
 		return "expereince.html";
 	}
 	
+	@GetMapping("/modify/{id}")
+	public String experienceModify(@PathVariable("id") Long id, Model model) {
+		Experience oldExperience =  this.expService.findById(id);
+		model.addAttribute("experience", oldExperience);
+		return "experience/modify";
+	}
+	
+	@PostMapping("/modify")
+	public String experienceUpdate(@Valid @ModelAttribute("buffet")Experience exp, @RequestParam("files")MultipartFile[] files, BindingResult bindingResult, Model model) {
+		if(!bindingResult.hasErrors()) {
+			if (files != null) {
+				FileStorer.dirEmpty(exp.getUser().getName()+ "_" +exp.getUser().getSurname()+ "/" + exp.getName());
+				int i=0;
+				for(MultipartFile file : files) {
+					if(!file.isEmpty()) {
+						exp.getImgs()[i]= FileStorer.store(file, exp.getUser().getName()+ "_" +exp.getUser().getSurname()+ "/" + exp.getName());
+						i++;
+					}
+				}
+			}
+			
+			this.expService.save(exp);
+			model.addAttribute("buffet", this.expService.findById(exp.getId()));
+			return "/experience/info";
+		}
+		else return "/experience/modify";
+	}
+	
 	
 }
