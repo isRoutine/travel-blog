@@ -15,22 +15,36 @@ public class Location {
 	private Long id;
 	
 	@UniqueElements
-	private String nation;
-	
-	@UniqueElements
-	private String state;
-	
-	@UniqueElements
 	private String country;
 	
-	
-	
-	public long getId() {
+	@UniqueElements
+	private String city;
+
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
+
+	public String getCountry() {
+		return country;
+	}
+
+	public void setCountry(String country) {
+		this.country = country;
+	}
+
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+	
+	
+	
 	
 }
