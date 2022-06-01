@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8" />
+	<link href="../static/index.css" rel="stylesheet">
+	<title>Travel-blog</title>
+</head>
+<body>
+	<header>
+		
+	</header>
+
+	<div class="login form">
+		<h2>Login</h2>
+		<form th:action = "@{/user/add}" method="post" th:object = "${user}">
+			<div th:if="${#fields.hasGlobalErrors()}">
+				<p th:each="err : ${#fields.globalErrors()}" th:text="${err}">...</p> 
+			</div>
+			<div>
+				
+				<span> Name <input type="text" th:field="*{name}" placeholder="name" /> </span>
+				<span th:if="${#fields.hasErrors('name')}" th:errors="*{name}"> </span>
+			</div>
+			<div>
+				
+				<span> UserName <input type="text" th:field="*{userName}" placeholder="userName" /> </span>
+				<span th:if="${#fields.hasErrors('userName')}" th:errors="*{userName}"> </span>
+			</div>
+			<div>
+				
+				<span> Surname <input type="text" th:field="*{surname}" placeholder="surname" /> </span>
+				<span th:if="${#fields.hasErrors('surname')}" th:errors="*{surname}"> </span>
+			</div>
+			<div>
+				
+				<span> Birth date <input type="date" th:field="*{birthDate}" placeholder="birthDate" /> </span>
+				<span th:if="${#fields.hasErrors('birthDate')}" th:errors="*{birthDate}"> </span>
+			</div>
+			<div>
+				
+				<span> Email <input type="text" th:field="*{email}" placeholder="email" /> </span>
+				<span th:if="${#fields.hasErrors('email')}" th:errors="*{email}"> </span>
+			</div>
+
+			<!--<div>
+				<span> Password:<input type="text" th:field="*{password}" placeholder="password" /> </span>
+				<span th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>
+			</div>-->
+
+			<div>
+				<!--<span class="button"> <a th:href="@{'/login'}" th:text="Login">Login</a> </span>-->
+				<button type="submit"> Conferma </button>			
+			</div>
+
+		</form>
+	</div>
+</body>
+</html>
