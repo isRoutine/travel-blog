@@ -10,11 +10,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import it.uniroma3.travelblog.model.User;
 import it.uniroma3.travelblog.service.UserService;
 
 @Controller
+@RequestMapping("/user")
 public class UserController {
 
 	@Autowired private UserService userService;
@@ -24,10 +26,10 @@ public class UserController {
 	 * Aggiungo al model un nuovo user nel quale 
 	 * memorizzero' i valori ricevuti dalla form
 	 */
-	@GetMapping("/user/form")
+	@GetMapping("/form")
 	public String addUserForm(Model model) {
 		model.addAttribute(new User());
-		return "login.html";
+		return "signUp.html";
 	}
 	
 	/* Aggiunta di un user al DB
@@ -35,7 +37,7 @@ public class UserController {
 	 * 		- se si, aggiungo l'user al DB e torno alla home
 	 * 		-altrimenti ritorno alla form mostrando le violazioni
 	 */
-	@PostMapping("/addUser")
+	@PostMapping("/add")
 	public String addUser(@Valid @ModelAttribute("user") User user, 
 								BindingResult bindingResult, Model model) {
 	
@@ -44,9 +46,9 @@ public class UserController {
 		if(!bindingResult.hasErrors()) {
 			userService.save(user);
 			model.addAttribute("user", user);
-			return null; // ritorna alla form di inserimento dati
+			return "index.html"; // ritorna alla form di inserimento dati
 		}
-		return null; // ritorna alla home page ?
+		return "signUp.html"; // ritorna alla home page ?
 	}
 	
 
@@ -55,14 +57,14 @@ public class UserController {
 	 * 		- se e' presente --> mostra il profilo
 	 * 		- altrimenti mostro una pagina di errore ? (TBD)
 	 */
-	@GetMapping("/user/{id}")
+	@GetMapping("/{id}")
 	public String getUser(@Valid @PathVariable("id") Long id, Model model ) {
 		User user = this.userService.findById(id);
 		if(user != null) {
 			model.addAttribute(user);
-			return null; // return alla pagina che mostra un profilo user
+			return "profile.html"; // return alla pagina che mostra un profilo user
 		}
-		return null; // return a una pagina di errore ?
+		return "signUp.html"; // return a una pagina di errore ?
 	}
 	
 	
