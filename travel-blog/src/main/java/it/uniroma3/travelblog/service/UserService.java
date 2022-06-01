@@ -36,6 +36,18 @@ public class UserService {
 		return userRepository.findById(id).get();
 	}
 	
+	@Transactional
+	public void update(User user) {
+		User foo = this.findById(user.getId());
+		foo.setName(user.getName());
+		foo.setSurname(user.getSurname());
+		foo.setBirthDate(user.getBirthDate());
+		foo.setUserName(user.getUserName());
+		foo.setEmail(user.getEmail());
+		this.userRepository.save(foo);
+	}
+	
+	
 	public List<User> findAll() {
 		List<User> users = new LinkedList<User>();
 		for(User u : userRepository.findAll()) {
