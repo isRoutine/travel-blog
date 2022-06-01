@@ -22,7 +22,10 @@ public class Experience {
 	@Id 
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
-
+	
+	@NotBlank
+	private String name;
+	
 	@Column(length = sLength)
 	private String description;
 	
@@ -36,6 +39,8 @@ public class Experience {
 	@ManyToOne
 	private Location location;
 	
+	@ManyToOne
+	private User user;
 	
 	
 	public Experience() {
@@ -82,6 +87,26 @@ public class Experience {
 		this.location = location;
 	}
 	
+	
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public void addImage(Image img) {
+		this.imgs.add(img);
+	}
 	
 	
 }

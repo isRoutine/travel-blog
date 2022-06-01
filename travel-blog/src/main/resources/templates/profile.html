@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8" />
+	<!--<link href="/css/my-style.css" rel="stylesheet">-->
+	<title>Dettagli user</title>
+</head>
+<body>
+	<div>
+		<h4>Dettagli user</h4>
+		<div>
+
+			<span th:text="${user.name}">Paolo</span>
+			<span th:text="${user.surname}">Rossi</span>
+			<span th:text="${user.birthDate}">55-22-2222 </span>
+			<span th:text="${user.userName}">cicc </span>
+			<span th:text="${user.email}">email@email </span>
+			<span><a href="/" th:href="@{'/user/edit/' + ${user.id}}">Modifica</a></span>
+			
+		</div>
+	</div>
+	<footer>
+		<a href="/">Home</a>
+	</footer>
+</body>
+</html>

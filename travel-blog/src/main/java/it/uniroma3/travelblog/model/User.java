@@ -13,7 +13,8 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-import org.hibernate.validator.constraints.UniqueElements;
+import org.springframework.format.annotation.DateTimeFormat;
+
 
 @Entity
 @Table(name = "users")
@@ -32,19 +33,20 @@ public class User {
 	private String surname;
 	
 	@NotNull
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate birthDate;
 	
 	@NotBlank
 	@NotNull
-	@UniqueElements
+	//@UniqueElements
 	private String userName;
 	
 	@NotNull
 	@NotBlank
-	@UniqueElements
+	//@UniqueElements
 	private String email;
 	
-	@OneToMany
+	@OneToMany(mappedBy = "user")
 	private List<Experience> experiences;
 	
 	
