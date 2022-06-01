@@ -16,7 +16,7 @@ import it.uniroma3.travelblog.model.User;
 import it.uniroma3.travelblog.service.UserService;
 
 @Controller
-@RequestMapping("/user")
+@RequestMapping("/user") //prefisso per tutti gli url di questa classe
 public class UserController {
 
 	@Autowired private UserService userService;
@@ -65,6 +65,32 @@ public class UserController {
 			return "profile.html"; // return alla pagina che mostra un profilo user
 		}
 		return "signUp.html"; // return a una pagina di errore ?
+	}
+	
+	
+	/* Edit profilo di un determinato user
+	 */
+	@GetMapping("/edit/{id}")
+	public String editUser(@Valid @PathVariable("id") Long id, Model model ) {
+		User user = this.userService.findById(id);
+		if(user != null) {
+			model.addAttribute("user", user);
+			return "signUp.html"; // return alla pagina che mostra un profilo user
+		}
+		return "profile.html"; // return a una pagina di errore ?
+	}
+	
+	/* Edit profilo di un determinato user
+	 */
+	@PostMapping("/edit-confirm")
+	public String editConfirmUser(@Valid @ModelAttribute("user") User user, BindingResult bindingResult,
+														Model model ) {
+		if(!bindingResult.hasErrors()) {
+			this.userService.update(user);
+			model.addAttribute("user", this.userService.findById(user.getId()));
+			return "/user/{" + user.getId() + "}";
+		}
+		return "signUp.html";
 	}
 	
 	
