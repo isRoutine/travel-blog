@@ -2,7 +2,8 @@
 <html>
 <head>
 	<meta charset="UTF-8" />
-	<link href="../static/index.css" rel="stylesheet">
+	<!--<link href="../static/index.css" rel="stylesheet">-->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
 	<title>Travel-blog</title>
 </head>
 <body>
@@ -11,48 +12,47 @@
 	</header>
 
 	<div class="login form">
-		<h2>Login</h2>
+		<h2>Sign up</h2>
 		<form th:action = "@{/user/add}" method="post" th:object = "${user}">
 			<div th:if="${#fields.hasGlobalErrors()}">
 				<p th:each="err : ${#fields.globalErrors()}" th:text="${err}">...</p> 
 			</div>
-			<div>
-				
-				<span> Name <input type="text" th:field="*{name}" placeholder="name" /> </span>
+
+			<div class="form-group">
+				<label for="inputName">Name</label>
+				<input type="text" th:field="*{name}" placeholder="name" class="form-control" id="inputEmail1" aria-describedby="name Help">
+				<!--<small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>-->
 				<span th:if="${#fields.hasErrors('name')}" th:errors="*{name}"> </span>
 			</div>
-			<div>
-				
-				<span> UserName <input type="text" th:field="*{userName}" placeholder="userName" /> </span>
-				<span th:if="${#fields.hasErrors('userName')}" th:errors="*{userName}"> </span>
-			</div>
-			<div>
-				
-				<span> Surname <input type="text" th:field="*{surname}" placeholder="surname" /> </span>
+			<div class="form-group">
+				<label for="inputName">Surname</label>
+				<input type="text" th:field="*{surname}" placeholder="surname" class="form-control" id="inputSurname" aria-describedby="surname Help">
+				<!--<small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>-->
 				<span th:if="${#fields.hasErrors('surname')}" th:errors="*{surname}"> </span>
 			</div>
-			<div>
-				
-				<span> Birth date <input type="date" th:field="*{birthDate}" placeholder="birthDate" /> </span>
+			<div class="form-group">
+				<label for="inputName">userName</label>
+				<input type="text" th:field="*{userName}" placeholder="userName" class="form-control" id="inputuserName" aria-describedby="userName Help">
+				<!--<small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>-->
+				<span th:if="${#fields.hasErrors('userName')}" th:errors="*{userName}"> </span>
+			</div>
+			<div class="form-group">
+				<label for="inputName">birthDate</label>
+				<input type="date" th:field="*{birthDate}" placeholder="birthDate" class="form-control" id="inputuserBirthDate" aria-describedby="birthDate Help">
+				<!--<small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>-->
 				<span th:if="${#fields.hasErrors('birthDate')}" th:errors="*{birthDate}"> </span>
 			</div>
-			<div>
-				
-				<span> Email <input type="text" th:field="*{email}" placeholder="email" /> </span>
+			<div class="form-group">
+				<label for="inputName">email</label>
+				<input type="text" th:field="*{email}" placeholder="email" class="form-control" id="inputuEmail" aria-describedby="email Help">
+				<!--<small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>-->
 				<span th:if="${#fields.hasErrors('email')}" th:errors="*{email}"> </span>
 			</div>
-
-			<!--<div>
-				<span> Password:<input type="text" th:field="*{password}" placeholder="password" /> </span>
-				<span th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>
-			</div>-->
-
-			<div>
-				<!--<span class="button"> <a th:href="@{'/login'}" th:text="Login">Login</a> </span>-->
-				<button type="submit"> Conferma </button>			
-			</div>
-
+			
+			<button type="submit" class="btn btn-primary">Submit</button>
 		</form>
 	</div>
+	<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF" crossorigin="anonymous"></script>
 </body>
 </html>
