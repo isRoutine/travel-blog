@@ -1,8 +1,6 @@
 package it.uniroma3.travelblog.model;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,7 +8,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
@@ -18,6 +15,7 @@ import javax.validation.constraints.NotNull;
 public class Experience {
 
 	private final static int sLength = 1024;
+	private static final int MAX_IMGS = 5;
 	
 	@Id 
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -33,8 +31,7 @@ public class Experience {
 	@NotNull
 	private LocalDateTime creationTime;
 	
-	@OneToMany
-	private List<Image> imgs;
+	private String[] imgs;
 	
 	@ManyToOne
 	private Location location;
@@ -42,9 +39,8 @@ public class Experience {
 	@ManyToOne
 	private User user;
 	
-	
 	public Experience() {
-		this.imgs = new ArrayList<Image>();
+		this.imgs = new String[MAX_IMGS];
 	}
 
 	public Long getId() {
@@ -71,11 +67,11 @@ public class Experience {
 		this.creationTime = creationTime;
 	}
 
-	public List<Image> getImg() {
+	public String[] getImgs() {
 		return imgs;
 	}
 
-	public void setImg(List<Image> imgs) {
+	public void setImgs(String[] imgs) {
 		this.imgs = imgs;
 	}
 
@@ -102,10 +98,6 @@ public class Experience {
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public void addImage(Image img) {
-		this.imgs.add(img);
 	}
 	
 	
