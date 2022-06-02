@@ -32,12 +32,12 @@ public class AuthController {
 	public String showRegisterForm(Model model) {
 		model.addAttribute("user", new User());
 		model.addAttribute("credentials", new Credentials());
-		return "/user/registerForm";
+		return "signUp";
 	}
 	
 	@GetMapping("/login")
 	public String showLoginForm(Model model) {
-		return "/user/loginForm";
+		return "login";
 	}
 	
 	@GetMapping("/logout")
@@ -53,7 +53,7 @@ public class AuthController {
     	if (credentials.getRole().equals(Credentials.ADMIN_ROLE)) {
             return "admin/home";
         }
-        return "/user/home";
+        return "index";
     }
     
     @PostMapping("/registration/validate")
@@ -65,9 +65,9 @@ public class AuthController {
         if(!userBindingResult.hasErrors() && !credentialsBindingResult.hasErrors()) {
             credentials.setUser(user);
             credentialsService.save(credentials);
-            return "/user/registrationSuccessful";
+            return "registrationSuccessful";
         }
-        return "/user/registerForm";
+        return "signUp";
     }
     
     /**TODO logica admin-user**/
