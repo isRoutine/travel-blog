@@ -36,11 +36,6 @@ public class User {
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate birthDate;
 	
-	@NotBlank
-	@NotNull
-	//@UniqueElements
-	private String userName;
-	
 	@NotNull
 	@NotBlank
 	//@UniqueElements
@@ -84,14 +79,6 @@ public class User {
 
 	public void setBirthDate(LocalDate birthDate) {
 		this.birthDate = birthDate;
-	}
-
-	public String getUserName() {
-		return userName;
-	}
-
-	public void setUserName(String userName) {
-		this.userName = userName;
 	}
 
 	public String getEmail() {

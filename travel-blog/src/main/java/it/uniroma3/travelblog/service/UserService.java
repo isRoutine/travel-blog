@@ -1,7 +1,8 @@
 package it.uniroma3.travelblog.service;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.transaction.Transactional;
 
@@ -16,43 +17,29 @@ public class UserService {
 	
 	@Autowired private UserRepository userRepository;
 
-	@Transactional
-	public void save(User user) {
-		userRepository.save(user);
-	}
-	
-	@Transactional
-	public void delete(User user) {
-		userRepository.delete(user);
-	}
-	
-	@Transactional
-	public void deleteById(Long id) {
-		userRepository.deleteById(id);
-	}
-	
-	// non necessaria la notazione @Transactional, sono metodi di lettura
-	public User findById(Long id) {
-		return userRepository.findById(id).get();
-	}
-	
-	@Transactional
-	public void update(User user) {
-		User foo = this.findById(user.getId());
-		foo.setName(user.getName());
-		foo.setSurname(user.getSurname());
-		foo.setBirthDate(user.getBirthDate());
-		foo.setUserName(user.getUserName());
-		foo.setEmail(user.getEmail());
-		this.userRepository.save(foo);
-	}
-	
-	
-	public List<User> findAll() {
-		List<User> users = new LinkedList<User>();
-		for(User u : userRepository.findAll()) {
-			users.add(u);
-		}
-		return users;	
-	}
+    @Transactional
+    public User findById(Long id) {
+        Optional<User> result = this.userRepository.findById(id);
+        return result.orElse(null);
+    }
+    
+    @Transactional
+    public User findByEmail(String email) {
+        Optional<User> result = this.userRepository.findByEmail(email);
+        return result.orElse(null);
+    }
+
+    @Transactional
+    public User save(User user) {
+        return this.userRepository.save(user);
+    }
+
+    @Transactional
+    public List<User> findAll() {
+        List<User> result = new ArrayList<>();
+        Iterable<User> iterable = this.userRepository.findAll();
+        for(User user : iterable)
+            result.add(user);
+        return result;
+    }
 }
