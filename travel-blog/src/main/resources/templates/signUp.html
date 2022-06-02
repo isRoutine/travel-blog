@@ -8,49 +8,130 @@
 </head>
 <body>
 	<header>
-		
+		<nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+			<div class="container-fluid">
+				<a class="navbar-brand" href="#">
+					<img th:src="@{/image/logo_test.png}" alt="" width="40" height="40" class="d-inline-block align-text-auto"> Drogati
+				</a>
+
+				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+				</button>
+				<div class="collapse navbar-collapse" id="navbarNav">
+					<ul class="navbar-nav">
+						<li class="nav-item">
+							<a class="nav-link" th:href="@{''}" th:text="Profile">Profile</a>
+						</li>
+					</ul>
+					<div class="login_bar">
+						<ul class="navbar-nav">
+							<li class="nav-item">
+								<a class="nav-link" aria-current="page" th:href="@{'....'}" th:text="Login">Login</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" aria-current="page" th:href="@{'/user/form'}" th:text="Sign-Up">Sign-Up</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</nav>
 	</header>
 
-	<div class="login form">
-		<h2>Sign up</h2>
-		<form th:action = "@{/user/add}" method="post" th:object = "${user}">
-			<div th:if="${#fields.hasGlobalErrors()}">
+		<!--<section class="vh-100" style="background-color: #eee;">-->
+  <div class="container h-100">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col-lg-12 col-xl-11">
+        <div class="card text-black" style="border-radius: 25px;">
+          <div class="card-body p-md-5">
+            <div class="row justify-content-center">
+              <div class="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">
+
+                <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Sign up</p>
+
+                <form class="mx-1 mx-md-4" th:action = "@{/user/add}" method="post" th:object = "${user}">
+                	<div th:if="${#fields.hasGlobalErrors()}">
 				<p th:each="err : ${#fields.globalErrors()}" th:text="${err}">...</p> 
 			</div>
 
-			<div class="form-group">
-				<label for="inputName">Name</label>
-				<input type="text" th:field="*{name}" placeholder="name" class="form-control" id="inputEmail1" aria-describedby="name Help">
-				<!--<small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>-->
-				<span th:if="${#fields.hasErrors('name')}" th:errors="*{name}"> </span>
-			</div>
-			<div class="form-group">
-				<label for="inputName">Surname</label>
-				<input type="text" th:field="*{surname}" placeholder="surname" class="form-control" id="inputSurname" aria-describedby="surname Help">
-				<!--<small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>-->
-				<span th:if="${#fields.hasErrors('surname')}" th:errors="*{surname}"> </span>
-			</div>
-			<div class="form-group">
-				<label for="inputName">userName</label>
-				<input type="text" th:field="*{userName}" placeholder="userName" class="form-control" id="inputuserName" aria-describedby="userName Help">
-				<!--<small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>-->
-				<span th:if="${#fields.hasErrors('userName')}" th:errors="*{userName}"> </span>
-			</div>
-			<div class="form-group">
-				<label for="inputName">birthDate</label>
-				<input type="date" th:field="*{birthDate}" placeholder="birthDate" class="form-control" id="inputuserBirthDate" aria-describedby="birthDate Help">
-				<!--<small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>-->
-				<span th:if="${#fields.hasErrors('birthDate')}" th:errors="*{birthDate}"> </span>
-			</div>
-			<div class="form-group">
-				<label for="inputName">email</label>
-				<input type="text" th:field="*{email}" placeholder="email" class="form-control" id="inputuEmail" aria-describedby="email Help">
-				<!--<small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>-->
-				<span th:if="${#fields.hasErrors('email')}" th:errors="*{email}"> </span>
-			</div>
-			
-			<button type="submit" class="btn btn-primary">Submit</button>
-		</form>
+                  <div class="d-flex flex-row align-items-center mb-4">
+                    <div class="form-outline flex-fill mb-0">
+                      <input type="text" th:field="*{name}" id="form3Example1c" class="form-control" />
+                      <label class="form-label" for="form3Example1c">Your Name</label>
+                      <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}"> </span>
+                    </div>
+                  </div>
+
+                  <div class="d-flex flex-row align-items-center mb-4">
+                    <div class="form-outline flex-fill mb-0">
+                      <input type="text" th:field="*{surname}" id="form3Example1c" class="form-control" />
+                      <label class="form-label" for="form3Example1c">Your Surname</label>
+                      <span th:if="${#fields.hasErrors('surname')}" th:errors="*{surname}"> </span>
+                    </div>
+                  </div>
+
+                  <div class="d-flex flex-row align-items-center mb-4">
+                    <div class="form-outline flex-fill mb-0">
+                      <input type="text" th:field="*{userName}" id="form3Example1c" class="form-control" />
+                      <label class="form-label" for="form3Example1c">Your User name</label>
+                      <span th:if="${#fields.hasErrors('userName')}" th:errors="*{userName}"> </span>
+                    </div>
+                  </div>
+
+                  <div class="d-flex flex-row align-items-center mb-4">
+                    <div class="form-outline flex-fill mb-0">
+                      <input type="date" th:field="*{surname}" id="form3Example1c" class="form-control" />
+                      <label class="form-label" for="form3Example1c">Your Birth date</label>
+                      <span th:if="${#fields.hasErrors('birthDate')}" th:errors="*{birthDate}"> </span>
+                    </div>
+                  </div>
+
+                  <div class="d-flex flex-row align-items-center mb-4">
+                    <div class="form-outline flex-fill mb-0">
+                      <input type="text" th:field="*{email}" id="form3Example1c" class="form-control" />
+                      <label class="form-label" for="form3Example1c">Your Email</label>
+                      <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}"> </span>
+                    </div>
+                  </div>
+
+                  <!--<div class="d-flex flex-row align-items-center mb-4">
+                    <i class="fas fa-lock fa-lg me-3 fa-fw"></i>
+                    <div class="form-outline flex-fill mb-0">
+                      <input type="password" id="form3Example4c" class="form-control" />
+                      <label class="form-label" for="form3Example4c">Password</label>
+                    </div>
+                  </div>
+
+                  <div class="d-flex flex-row align-items-center mb-4">
+                    <i class="fas fa-key fa-lg me-3 fa-fw"></i>
+                    <div class="form-outline flex-fill mb-0">
+                      <input type="password" id="form3Example4cd" class="form-control" />
+                      <label class="form-label" for="form3Example4cd">Repeat your password</label>
+                    </div>
+                  </div>-->
+
+
+                  <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
+                    <button type="button" class="btn btn-primary btn-lg">Register</button>
+                  </div>
+
+                </form>
+
+              </div>
+              <div class="col-md-10 col-lg-6 col-xl-7 d-flex align-items-center order-1 order-lg-2">
+
+                <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-registration/draw1.webp"
+                  class="img-fluid" alt="Sample image">
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+		
 	</div>
 	<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF" crossorigin="anonymous"></script>
