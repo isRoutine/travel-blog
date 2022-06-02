@@ -7,7 +7,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Travel-blog home page</title>
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
-	<!--<link rel="stylesheet" href="../static/index.css">-->
+	<link rel="stylesheet" href="../static/index.css">
 </head>
 <body>
 	<header>
@@ -41,16 +41,40 @@
 		</nav>
 	</header>
 
-	<div id="carouselControls" class="carousel slide" data-touc="true" data-ride="carousel">
+	<div id="carouselControls" class="carousel slide mt-10" data-touc="true" data-ride="carousel">
 		<div class="carousel-inner">
 			<div class="carousel-item active">
-				<img class="d-block w-100" th:src="@{/image/foto1.JPG}" alt="First slide">
+				<div class="card d-block w-100" style="width: 18rem;" alt="First slide">
+					<img th:src="@{/image/foto1.JPG}" class="card-img-top" alt="...">
+					<div class="card-body">
+						<h5 class="card-title">Card title</h5>
+						<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+						<a href="#" class="btn btn-primary">Go somewhere</a>
+					</div>
+				</div>
+				<!--<img class="d-block w-100" th:src="@{/image/foto1.JPG}" alt="First slide">-->
 			</div>
 			<div class="carousel-item">
-				<img class="d-block w-100" th:src="@{/image/foto2.JPG}" alt="Second slide">
+				<div class="card d-block w-100" style="width: 18rem;" alt="Second slide">
+					<img th:src="@{/image/foto2.JPG}" class="card-img-top" alt="...">
+					<div class="card-body">
+						<h5 class="card-title">Card title</h5>
+						<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+						<a href="#" class="btn btn-primary">Go somewhere</a>
+					</div>
+				</div>
+				<!--<img class="d-block w-100" th:src="@{/image/foto2.JPG}" alt="Second slide">-->
 			</div>
 			<div class="carousel-item">
-				<img class="d-block w-100" th:src="@{/image/foto3.JPG}" alt="Third slide">
+				<div class="card d-block w-100" style="width: 18rem;" alt="Third slide">
+					<img th:src="@{/image/foto3.JPG}" class="card-img-top" alt="...">
+					<div class="card-body">
+						<h5 class="card-title">Card title</h5>
+						<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+						<a href="#" class="btn btn-primary">Go somewhere</a>
+					</div>
+				</div>
+				<!--<img class="d-block w-100" th:src="@{/image/foto3.JPG}" alt="Third slide">-->
 			</div>
 		</div>
 		<a class="carousel-control-prev" data-target="#carouselControls" role="button" data-slide="prev">
