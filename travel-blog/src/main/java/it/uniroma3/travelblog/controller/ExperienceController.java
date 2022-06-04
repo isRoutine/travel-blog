@@ -50,7 +50,7 @@ public class ExperienceController {
 	
 	@GetMapping("/{id}")
 	public String getExperience(@PathVariable("id") Long id, Model model) {
-		model.addAttribute("expereinxe", this.expService.findById(id));
+		model.addAttribute("expereince", this.expService.findById(id));
 		return "expereince.html";
 	}
 	
