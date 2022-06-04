@@ -31,10 +31,6 @@ public class ExperienceController {
 	@Autowired
 	private UserService userService;
 	
-	private String getDirectoryName(Experience exp) {
-		return exp.getUser().getName()+ "_" +exp.getUser().getSurname()+ "/" + exp.getName();
-	}
-	
 	/*
 	 * serve in qualche modo avere riferimento dell'user che la ha creata
 	 * */
@@ -43,7 +39,7 @@ public class ExperienceController {
 		if(!bindingResult.hasErrors()) {
 			int i=0;
  			for(MultipartFile file : files) {
- 				exp.getImgs()[i] = FileStorer.store(file,  getDirectoryName(exp));
+ 				exp.getImgs()[i] = FileStorer.store(file,  exp.getDirectoryName());
  				i++;
 			}
  			
@@ -69,7 +65,7 @@ public class ExperienceController {
 	@GetMapping("/delete/{id}")
 	public String deleteExperience(@PathVariable("id") Long id, Model model) {
 		Experience exp = this.expService.findById(id);
-		FileStorer.removeImgsAndDir(getDirectoryName(exp), exp.getImgs());
+		FileStorer.removeImgsAndDir(exp.getDirectoryName(), exp.getImgs());
 		this.expService.deleteById(id);
 		return "index.html";
 	}
@@ -80,7 +76,7 @@ public class ExperienceController {
 		for(String currImg : exp.getImgs()) {
 			if(currImg != null && currImg.equals(img)) {
 				exp.removeImg(img);
-				FileStorer.removeImg(getDirectoryName(exp), img);
+				FileStorer.removeImg(exp.getDirectoryName(), img);
 			}
 			
 		}
@@ -115,12 +111,12 @@ public class ExperienceController {
 	public String experienceUpdate(@Valid @ModelAttribute("experience")Experience exp, @RequestParam("files")MultipartFile[] files, BindingResult bindingResult, Model model) {
 		if(!bindingResult.hasErrors()) {
 			if (files != null) {
-				FileStorer.dirEmpty(getDirectoryName(exp));
+				FileStorer.dirEmpty(exp.getDirectoryName());
 				exp.emptyImgst();
 				int i=0;
 				for(MultipartFile file : files) {
 					if(!file.isEmpty()) {
-						exp.getImgs()[i]= FileStorer.store(file, getDirectoryName(exp));
+						exp.getImgs()[i]= FileStorer.store(file, exp.getDirectoryName());
 						i++;
 					}
 				}

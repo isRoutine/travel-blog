@@ -110,5 +110,9 @@ public class Experience {
 		}
 	}
 	
+	public String getDirectoryName() {
+		return this.getUser().getName().replaceAll("\\s+","_")+ "_" +this.getUser().getSurname().replaceAll("\\s+","_")+ "/" + this.getName().replaceAll("\\s+","_");
+	}
+	
 	
 }
