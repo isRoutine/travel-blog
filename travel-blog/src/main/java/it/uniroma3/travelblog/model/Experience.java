@@ -100,7 +100,7 @@ public class Experience {
 		this.name = name;
 	}
 	
-	public void emptyImgst() {
+	public void emptyImgs() {
 		this.imgs = new String[MAX_IMGS];
 	}
 

@@ -110,7 +110,7 @@ public class ExperienceController {
 		if(!bindingResult.hasErrors()) {
 			if (files != null) {
 				FileStorer.dirEmpty(exp.getDirectoryName());
-				exp.emptyImgst();
+				exp.emptyImgs();
 				int i=0;
 				for(MultipartFile file : files) {
 					if(!file.isEmpty()) {
