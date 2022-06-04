@@ -9,7 +9,7 @@ import it.uniroma3.travelblog.model.Experience;
 import it.uniroma3.travelblog.service.ExperienceService;
 
 @Component
-public class ExpereinceValidator implements Validator {
+public class ExperienceValidator implements Validator {
 
 	@Autowired
 	private ExperienceService expService;

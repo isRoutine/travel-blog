@@ -31,9 +31,7 @@ public class ExperienceController {
 	@Autowired
 	private UserService userService;
 	
-	/*
-	 * serve in qualche modo avere riferimento dell'user che la ha creata
-	 * */
+	
 	@PostMapping("/add")
 	public String addExperience(@Valid @ModelAttribute("experience") Experience exp, @RequestParam("file") MultipartFile[] files, BindingResult bindingResult, Model model) {
 		if(!bindingResult.hasErrors()) {
