@@ -134,7 +134,7 @@ public class ExperienceController {
 	}
 	
 	/**Metodo da invocare per ottenere il caricamento delle esperienze della pagina precedente**/
-	@GetMapping("/home/next/{page}")
+	@GetMapping("/home/prev/{page}")
 	public String getPrevExperiences(@PathVariable("page") Integer page, Model model) {
 		List<Experience> experieces = this.expService.findAll();
 		experieces.sort(new Comparator<Experience>() {
