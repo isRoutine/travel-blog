@@ -1,6 +1,8 @@
 package it.uniroma3.travelblog.controller;
 
 import java.time.LocalDateTime;
+import java.util.Comparator;
+import java.util.List;
 
 import javax.validation.Valid;
 
@@ -25,12 +27,13 @@ import it.uniroma3.travelblog.service.UserService;
 @RequestMapping("/experience")
 public class ExperienceController {
 	
+	private static final int EXP_FOR_PAGE = 5;
+
 	@Autowired
 	private ExperienceService expService;
 	
 	@Autowired
 	private UserService userService;
-	
 	
 	@PostMapping("/add")
 	public String addExperience(@Valid @ModelAttribute("experience") Experience exp, @RequestParam("file") MultipartFile[] files, BindingResult bindingResult, Model model) {
@@ -96,6 +99,20 @@ public class ExperienceController {
 	
 		model.addAttribute("expereince",exp);
 		return "expereince.html";
+	}
+	
+	@GetMapping("/all/get/{page}")
+	public String getNewExperiences(@PathVariable("page") Integer page, Model model) {
+		List<Experience> experieces = this.expService.findAll();
+		experieces.sort(new Comparator<Experience>() {
+			@Override
+			public int compare(Experience o1, Experience o2) {
+				return o1.getCreationTime().compareTo(o2.getCreationTime());
+			}
+		});
+		
+		model.addAttribute("experience", experieces.subList(page*EXP_FOR_PAGE, (page*EXP_FOR_PAGE)+EXP_FOR_PAGE));
+		return "/experience/all";
 	}
 	
 	@GetMapping("/modify/{id}")
