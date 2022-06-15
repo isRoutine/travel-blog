@@ -101,8 +101,9 @@ public class ExperienceController {
 		return "expereince.html";
 	}
 	
-	@GetMapping("/all/get/{page}")
-	public String getNewExperiences(@PathVariable("page") Integer page, Model model) {
+	/**Primo metodo da invocare per ottenere la home page**/
+	@GetMapping("/home/get")
+	public String getExperiencesHome(Model model) {
 		List<Experience> experieces = this.expService.findAll();
 		experieces.sort(new Comparator<Experience>() {
 			@Override
@@ -111,9 +112,43 @@ public class ExperienceController {
 			}
 		});
 		
-		model.addAttribute("experience", experieces.subList(page*EXP_FOR_PAGE, (page*EXP_FOR_PAGE)+EXP_FOR_PAGE));
+		model.addAttribute("currPage", 0);
+		model.addAttribute("experiences", experieces.subList(0, EXP_FOR_PAGE));
 		return "/experience/all";
 	}
+	
+	/**Metodo da invocare per ottenere il caricamento delle esperienze della pagina successiva**/
+	@GetMapping("/home/next/{page}")
+	public String getNextExperiences(@PathVariable("page") Integer page, Model model) {
+		List<Experience> experieces = this.expService.findAll();
+		experieces.sort(new Comparator<Experience>() {
+			@Override
+			public int compare(Experience o1, Experience o2) {
+				return o1.getCreationTime().compareTo(o2.getCreationTime());
+			}
+		});
+		Integer currPage = page+1;
+		model.addAttribute("currPage", currPage);
+		model.addAttribute("experiences", experieces.subList(currPage*EXP_FOR_PAGE, (currPage*EXP_FOR_PAGE)+EXP_FOR_PAGE));
+		return "/experience/all";
+	}
+	
+	/**Metodo da invocare per ottenere il caricamento delle esperienze della pagina precedente**/
+	@GetMapping("/home/next/{page}")
+	public String getPrevExperiences(@PathVariable("page") Integer page, Model model) {
+		List<Experience> experieces = this.expService.findAll();
+		experieces.sort(new Comparator<Experience>() {
+			@Override
+			public int compare(Experience o1, Experience o2) {
+				return o1.getCreationTime().compareTo(o2.getCreationTime());
+			}
+		});
+		Integer currPage = page-1;
+		model.addAttribute("currPage", currPage);
+		model.addAttribute("experiences", experieces.subList(currPage*EXP_FOR_PAGE, (currPage*EXP_FOR_PAGE)+EXP_FOR_PAGE));
+		return "/experience/all";
+	}
+
 	
 	@GetMapping("/modify/{id}")
 	public String experienceModify(@PathVariable("id") Long id, Model model) {
