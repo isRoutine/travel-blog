@@ -2,25 +2,87 @@
 <html>
 <head>
 	<meta charset="UTF-8" />
-	<!--<link href="/css/my-style.css" rel="stylesheet">-->
 	<title>Dettagli user</title>
+	  	<!-- CSS only -->
+  		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" 
+  			integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+  
+  		<!-- JavaScript Bundle with Popper -->
+  		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" 
+  				integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+  		
 </head>
 <body>
-	<div>
-		<h4>Dettagli user</h4>
-		<div>
+<!-- 	<div> -->
+<!-- 		<h4>Dettagli user</h4> -->
+<!-- 		<div> -->
 
-			<span th:text="${user.name}">Paolo</span>
-			<span th:text="${user.surname}">Rossi</span>
-			<span th:text="${user.birthDate}">55-22-2222 </span>
-			<span th:text="${user.userName}">cicc </span>
-			<span th:text="${user.email}">email@email </span>
-			<span><a href="/" th:href="@{'/user/edit/' + ${user.id}}">Modifica</a></span>
+<!-- 			<span th:text="${user.name}">Paolo</span> -->
+<!-- 			<span th:text="${user.surname}">Rossi</span> -->
+<!-- 			<span th:text="${user.birthDate}">55-22-2222 </span> -->
+<!-- 			<span th:text="${user.userName}">cicc </span> -->
+<!-- 			<span th:text="${user.email}">email@email </span> -->
+<!-- 			<span><a href="/" th:href="@{'/user/edit/' + ${user.id}}">Modifica</a></span> -->
 			
+<!-- 		</div> -->
+<!-- 	</div> -->
+
+		<div class="container border-bottom pb-3">
+			<div class=" d-flex row justify-content-center m-1">
+				<div class="col-md-4 d-flex justify-content-center my-1">
+					<div class="card">
+						<img src="/images/profile.png" class="card-img-top" alt="...">
+			  			<div class="card-body">
+			   				 <h5 class="card-title" >Nome Cognome - @username</h5>	
+			   				 <div class="card-title">travelblog@email.com</div>			   				 
+			   				 <div class="card-title">01/01/01</div>	
+							 	<a  href="/"  class="btn btn-outline-primary mt-3">
+									Modifica Profilo
+								</a>		
+						</div>			
+					</div>
+				</div>	
+			</div>	
 		</div>
-	</div>
-	<footer>
-		<a href="/">Home</a>
-	</footer>
+		
+		
+		<div class="container my-5">
+			<div class="row my-4 d-flex justify-content-start">
+				<h4 class="justify-content-center d-flex">Tutte le esperienze di Nome Cognome </h4>
+			    <div class="d-flex justify-content-end">
+			    	<a  href="/" class="btn btn-outline-success">Aggiungi Esperienza</a>
+			    </div>
+	
+				
+			</div>
+			
+			<div class=" d-flex row justify-content-start">
+				<div  class="col-md-6 col-lg-4 d-flex justify-content-center">
+					<div class="card  my-2">
+						<img src="/images/mountain.png" class="card-img-top" alt="...">
+			  			<div class="card-body">
+			   				 <h5 class="card-title" >Esperienza #1</h5>
+			    			 <p class="card-text" >Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+			    			 <div class="container">
+			    			 	<div class="row d-flex justify-content-center px-3 my-1">
+			    					<a  href="/" class="btn btn-outline-success">
+			    						Modifica
+			    					</a>	    					
+			    			 	</div>		
+			    			 	<div class="row d-flex justify-content-center px-3 my-1">
+			    					<a  href="/" class="btn btn-outline-danger">
+			    						Elimina
+			    					</a>	    					
+			    			 	</div>	    			 				    			 
+			    			 </div>
+
+			  			</div>
+					</div> 			
+				</div>				
+			</div>
+		</div>
+
+
+
 </body>
 </html>

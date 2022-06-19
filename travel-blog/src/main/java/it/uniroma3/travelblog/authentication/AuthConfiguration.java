@@ -33,7 +33,7 @@ public class AuthConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, "/login", "/registration/validate").permitAll()
                 .antMatchers(HttpMethod.GET, "/admin/**").hasAnyAuthority(ADMIN_ROLE)
                 .antMatchers(HttpMethod.POST, "/admin/**").hasAnyAuthority(ADMIN_ROLE)
-                .anyRequest().authenticated()
+                //.anyRequest().authenticated()
 
                 /** login **/
                 .and().formLogin()
