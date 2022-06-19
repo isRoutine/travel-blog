@@ -33,9 +33,9 @@
 					<div class="card">
 						<img src="/images/profile.png" class="card-img-top" alt="...">
 			  			<div class="card-body">
-			   				 <h5 class="card-title" >Nome Cognome - @username</h5>	
-			   				 <div class="card-title">travelblog@email.com</div>			   				 
-			   				 <div class="card-title">01/01/01</div>	
+			   				 <h5 class="card-title" th:text="|${user.name} ${user.surname} - ${user.id}|">Nome Cognome - id</h5>	
+			   				 <div class="card-title" th:text="${user.email}">travelblog@email.com</div>			   				 
+			   				 <div class="card-title" th:text="${user.birthDate}">01/01/01</div>	
 							 	<a  href="/"  class="btn btn-outline-primary mt-3">
 									Modifica Profilo
 								</a>		
@@ -50,14 +50,14 @@
 			<div class="row my-4 d-flex justify-content-start border">
 				<h4 class="justify-content-center d-flex">Tutte le esperienze di Nome Cognome </h4>
 			    <div class=" col  d-flex justify-content-end border m-3">
-			    	<a  href="/" class="btn btn-primary">Aggiungi Esperienza</a>
+			    	<a  th:href="@{'/experience/add/' + ${user.id}}" href="/" class="btn btn-primary">Aggiungi Esperienza</a>
 			    </div>
 	
 				
 			</div>
 			
 			<div class=" d-flex row justify-content-start">
-				<div  class="col-md-6 col-lg-4 d-flex justify-content-center">
+				<div  th:each="experience : ${user.experiences}" class="col-md-6 col-lg-4 d-flex justify-content-center">
 					<div class="card  my-2">
 						<img src="/images/mountain.png" class="card-img-top" alt="...">
 			  			<div class="card-body">

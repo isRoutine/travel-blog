@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import it.uniroma3.travelblog.model.Experience;
+import it.uniroma3.travelblog.model.User;
 import it.uniroma3.travelblog.presentation.FileStorer;
 import it.uniroma3.travelblog.service.ExperienceService;
 import it.uniroma3.travelblog.service.UserService;
@@ -35,20 +36,37 @@ public class ExperienceController {
 	@Autowired
 	private UserService userService;
 	
-	@PostMapping("/add")
-	public String addExperience(@Valid @ModelAttribute("experience") Experience exp, @RequestParam("file") MultipartFile[] files, BindingResult bindingResult, Model model) {
-		if(!bindingResult.hasErrors()) {
-			int i=0;
- 			for(MultipartFile file : files) {
- 				exp.getImgs()[i] = FileStorer.store(file,  exp.getDirectoryName());
- 				i++;
-			}
- 			
-			this.expService.save(exp);
-			model.addAttribute("experience", this.expService.findById(exp.getId()));
-			return "/experience/info";
-		}
-		else return "/experience/form";
+//	@PostMapping("/add")
+//	public String addExperience(@Valid @ModelAttribute("experience") Experience exp, @RequestParam("file") MultipartFile[] files, BindingResult bindingResult, Model model) {
+//		if(!bindingResult.hasErrors()) {
+//			int i=0;
+// 			for(MultipartFile file : files) {
+// 				exp.getImgs()[i] = FileStorer.store(file,  exp.getDirectoryName());
+// 				i++;
+//			}
+// 			
+//			this.expService.save(exp);
+//			model.addAttribute("experience", this.expService.findById(exp.getId()));
+//			return "/experience/info";
+//		}
+//		else return "/experience/form";
+//	}
+	
+	@PostMapping("/add/{userId}")
+	public String addExperience(@ModelAttribute("experience") Experience exp, @PathVariable("userId") Long userId, Model model) {
+ 			User user = this.userService.findById(userId);
+			user.getExperiences().add(exp);
+ 			exp.setUser(user);
+			this.userService.save(user);
+			return "redirect:/profile";
+	}
+	
+	@GetMapping("/add/{userId}")
+	public String addExperienceForm(@PathVariable Long userId, Model model) {
+		Experience experience = new Experience();
+		model.addAttribute("experience",experience);
+		model.addAttribute("userId",userId);
+		return "experience/addExperience";
 	}
 	
 	@GetMapping("/{id}")

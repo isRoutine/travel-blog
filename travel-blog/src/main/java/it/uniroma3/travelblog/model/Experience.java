@@ -28,8 +28,8 @@ public class Experience{
 	@Column(length = sLength)
 	private String description;
 	
-	@NotBlank
-	@NotNull
+	//@NotBlank
+	//@NotNull
 	private LocalDateTime creationTime;
 	
 	private String[] imgs;
