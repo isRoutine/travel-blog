@@ -1,6 +1,8 @@
 package it.uniroma3.travelblog.controller;
 
 import java.time.LocalDateTime;
+import java.util.Comparator;
+import java.util.List;
 
 import javax.validation.Valid;
 
@@ -25,25 +27,20 @@ import it.uniroma3.travelblog.service.UserService;
 @RequestMapping("/experience")
 public class ExperienceController {
 	
+	private static final int EXP_FOR_PAGE = 5;
+
 	@Autowired
 	private ExperienceService expService;
 	
 	@Autowired
 	private UserService userService;
 	
-	private String getDirectoryName(Experience exp) {
-		return exp.getUser().getName()+ "_" +exp.getUser().getSurname()+ "/" + exp.getName();
-	}
-	
-	/*
-	 * serve in qualche modo avere riferimento dell'user che la ha creata
-	 * */
 	@PostMapping("/add")
 	public String addExperience(@Valid @ModelAttribute("experience") Experience exp, @RequestParam("file") MultipartFile[] files, BindingResult bindingResult, Model model) {
 		if(!bindingResult.hasErrors()) {
 			int i=0;
  			for(MultipartFile file : files) {
- 				exp.getImgs()[i] = FileStorer.store(file,  getDirectoryName(exp));
+ 				exp.getImgs()[i] = FileStorer.store(file,  exp.getDirectoryName());
  				i++;
 			}
  			
@@ -56,7 +53,7 @@ public class ExperienceController {
 	
 	@GetMapping("/{id}")
 	public String getExperience(@PathVariable("id") Long id, Model model) {
-		model.addAttribute("expereinxe", this.expService.findById(id));
+		model.addAttribute("expereince", this.expService.findById(id));
 		return "expereince.html";
 	}
 	
@@ -69,7 +66,7 @@ public class ExperienceController {
 	@GetMapping("/delete/{id}")
 	public String deleteExperience(@PathVariable("id") Long id, Model model) {
 		Experience exp = this.expService.findById(id);
-		FileStorer.removeImgsAndDir(getDirectoryName(exp), exp.getImgs());
+		FileStorer.removeImgsAndDir(exp.getDirectoryName(), exp.getImgs());
 		this.expService.deleteById(id);
 		return "index.html";
 	}
@@ -80,7 +77,7 @@ public class ExperienceController {
 		for(String currImg : exp.getImgs()) {
 			if(currImg != null && currImg.equals(img)) {
 				exp.removeImg(img);
-				FileStorer.removeImg(getDirectoryName(exp), img);
+				FileStorer.removeImg(exp.getDirectoryName(), img);
 			}
 			
 		}
@@ -104,6 +101,55 @@ public class ExperienceController {
 		return "expereince.html";
 	}
 	
+	/**Primo metodo da invocare per ottenere la home page**/
+	@GetMapping("/home/get")
+	public String getExperiencesHome(Model model) {
+		List<Experience> experieces = this.expService.findAll();
+		experieces.sort(new Comparator<Experience>() {
+			@Override
+			public int compare(Experience o1, Experience o2) {
+				return o1.getCreationTime().compareTo(o2.getCreationTime());
+			}
+		});
+		
+		model.addAttribute("currPage", 0);
+		model.addAttribute("experiences", experieces.subList(0, EXP_FOR_PAGE));
+		return "/experience/all";
+	}
+	
+	/**Metodo da invocare per ottenere il caricamento delle esperienze della pagina successiva**/
+	@GetMapping("/home/next/{page}")
+	public String getNextExperiences(@PathVariable("page") Integer page, Model model) {
+		List<Experience> experieces = this.expService.findAll();
+		experieces.sort(new Comparator<Experience>() {
+			@Override
+			public int compare(Experience o1, Experience o2) {
+				return o1.getCreationTime().compareTo(o2.getCreationTime());
+			}
+		});
+		Integer currPage = page+1;
+		model.addAttribute("currPage", currPage);
+		model.addAttribute("experiences", experieces.subList(currPage*EXP_FOR_PAGE, (currPage*EXP_FOR_PAGE)+EXP_FOR_PAGE));
+		return "/experience/all";
+	}
+	
+	/**Metodo da invocare per ottenere il caricamento delle esperienze della pagina precedente**/
+	@GetMapping("/home/prev/{page}")
+	public String getPrevExperiences(@PathVariable("page") Integer page, Model model) {
+		List<Experience> experieces = this.expService.findAll();
+		experieces.sort(new Comparator<Experience>() {
+			@Override
+			public int compare(Experience o1, Experience o2) {
+				return o1.getCreationTime().compareTo(o2.getCreationTime());
+			}
+		});
+		Integer currPage = page-1;
+		model.addAttribute("currPage", currPage);
+		model.addAttribute("experiences", experieces.subList(currPage*EXP_FOR_PAGE, (currPage*EXP_FOR_PAGE)+EXP_FOR_PAGE));
+		return "/experience/all";
+	}
+
+	
 	@GetMapping("/modify/{id}")
 	public String experienceModify(@PathVariable("id") Long id, Model model) {
 		Experience oldExperience =  this.expService.findById(id);
@@ -115,12 +161,12 @@ public class ExperienceController {
 	public String experienceUpdate(@Valid @ModelAttribute("experience")Experience exp, @RequestParam("files")MultipartFile[] files, BindingResult bindingResult, Model model) {
 		if(!bindingResult.hasErrors()) {
 			if (files != null) {
-				FileStorer.dirEmpty(getDirectoryName(exp));
-				exp.emptyImgst();
+				FileStorer.dirEmpty(exp.getDirectoryName());
+				exp.emptyImgs();
 				int i=0;
 				for(MultipartFile file : files) {
 					if(!file.isEmpty()) {
-						exp.getImgs()[i]= FileStorer.store(file, getDirectoryName(exp));
+						exp.getImgs()[i]= FileStorer.store(file, exp.getDirectoryName());
 						i++;
 					}
 				}

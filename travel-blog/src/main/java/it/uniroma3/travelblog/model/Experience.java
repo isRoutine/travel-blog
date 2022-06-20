@@ -1,6 +1,7 @@
 package it.uniroma3.travelblog.model;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,7 +13,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @Entity
-public class Experience {
+public class Experience{
 
 	private final static int sLength = 1024;
 	private static final int MAX_IMGS = 5;
@@ -100,7 +101,7 @@ public class Experience {
 		this.name = name;
 	}
 	
-	public void emptyImgst() {
+	public void emptyImgs() {
 		this.imgs = new String[MAX_IMGS];
 	}
 
@@ -110,5 +111,26 @@ public class Experience {
 		}
 	}
 	
+	public String getDirectoryName() {
+		return this.getUser().getName().replaceAll("\\s+","_")+ "_" +this.getUser().getSurname().replaceAll("\\s+","_")+ "/" + this.getName().replaceAll("\\s+","_");
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(creationTime, name, user);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Experience other = (Experience) obj;
+		return Objects.equals(creationTime, other.creationTime) && Objects.equals(name, other.name)
+				&& Objects.equals(user, other.user);
+	}
 	
 }
