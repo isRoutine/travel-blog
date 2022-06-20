@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import it.uniroma3.travelblog.model.Experience;
+import it.uniroma3.travelblog.model.User;
 import it.uniroma3.travelblog.presentation.FileStorer;
 import it.uniroma3.travelblog.service.ExperienceService;
 import it.uniroma3.travelblog.service.UserService;
@@ -35,6 +36,18 @@ public class ExperienceController {
 	@Autowired
 	private UserService userService;
 	
+	
+	private List<Experience> getSortedExperiences() {
+		List<Experience> experieces = this.expService.findAll();
+		experieces.sort(new Comparator<Experience>() {
+			@Override
+			public int compare(Experience o1, Experience o2) {
+				return o1.getCreationTime().compareTo(o2.getCreationTime());
+			}
+		});
+		return experieces;
+	}
+	
 	@PostMapping("/add")
 	public String addExperience(@Valid @ModelAttribute("experience") Experience exp, @RequestParam("file") MultipartFile[] files, BindingResult bindingResult, Model model) {
 		if(!bindingResult.hasErrors()) {
@@ -43,7 +56,8 @@ public class ExperienceController {
  				exp.getImgs()[i] = FileStorer.store(file,  exp.getDirectoryName());
  				i++;
 			}
- 			
+ 			exp.getUser().addExperience(exp);
+ 			this.userService.save(exp.getUser());
 			this.expService.save(exp);
 			model.addAttribute("experience", this.expService.findById(exp.getId()));
 			return "/experience/info";
@@ -94,9 +108,9 @@ public class ExperienceController {
 	@GetMapping("/form/{id}")
 	public String expereinceForm(@PathVariable("id") Long id, Model model) {
 		Experience exp =  new Experience();
+		User usr = this.userService.findById(id);
 		exp.setCreationTime(LocalDateTime.now());
-		exp.setUser(userService.findById(id));
-	
+		exp.setUser(usr);
 		model.addAttribute("expereince",exp);
 		return "expereince.html";
 	}
@@ -120,13 +134,7 @@ public class ExperienceController {
 	/**Metodo da invocare per ottenere il caricamento delle esperienze della pagina successiva**/
 	@GetMapping("/home/next/{page}")
 	public String getNextExperiences(@PathVariable("page") Integer page, Model model) {
-		List<Experience> experieces = this.expService.findAll();
-		experieces.sort(new Comparator<Experience>() {
-			@Override
-			public int compare(Experience o1, Experience o2) {
-				return o1.getCreationTime().compareTo(o2.getCreationTime());
-			}
-		});
+		List<Experience> experieces = getSortedExperiences();
 		Integer currPage = page+1;
 		model.addAttribute("currPage", currPage);
 		model.addAttribute("experiences", experieces.subList(currPage*EXP_FOR_PAGE, (currPage*EXP_FOR_PAGE)+EXP_FOR_PAGE));
@@ -136,13 +144,7 @@ public class ExperienceController {
 	/**Metodo da invocare per ottenere il caricamento delle esperienze della pagina precedente**/
 	@GetMapping("/home/prev/{page}")
 	public String getPrevExperiences(@PathVariable("page") Integer page, Model model) {
-		List<Experience> experieces = this.expService.findAll();
-		experieces.sort(new Comparator<Experience>() {
-			@Override
-			public int compare(Experience o1, Experience o2) {
-				return o1.getCreationTime().compareTo(o2.getCreationTime());
-			}
-		});
+		List<Experience> experieces = getSortedExperiences();
 		Integer currPage = page-1;
 		model.addAttribute("currPage", currPage);
 		model.addAttribute("experiences", experieces.subList(currPage*EXP_FOR_PAGE, (currPage*EXP_FOR_PAGE)+EXP_FOR_PAGE));
@@ -160,6 +162,7 @@ public class ExperienceController {
 	@PostMapping("/modify")
 	public String experienceUpdate(@Valid @ModelAttribute("experience")Experience exp, @RequestParam("files")MultipartFile[] files, BindingResult bindingResult, Model model) {
 		if(!bindingResult.hasErrors()) {
+			FileStorer.dirRename(this.expService.findById(exp.getId()).getDirectoryName() , exp.getDirectoryName());
 			if (files != null) {
 				FileStorer.dirEmpty(exp.getDirectoryName());
 				exp.emptyImgs();

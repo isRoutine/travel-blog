@@ -13,7 +13,7 @@ public class FileStorer {
 	public static String uploadDirectory = System.getProperty("user.dir")+"/src/main/resources/static/images/";
 	
 	private static String setupDirName(String owner) {
-		return uploadDirectory+(owner.strip());
+		return uploadDirectory+owner;
 	}
 	
 	public static String store(MultipartFile file, String owner) {
@@ -71,6 +71,10 @@ public class FileStorer {
 	public static void dirEmptyEndDelete(String owner) {
 		dirEmpty(owner);
 		removeDirectory(owner);
+	}
+	
+	public static void dirRename(String oldName, String newName) {
+		new File(setupDirName(oldName)).renameTo(new File(setupDirName(newName)));
 	}
 		
 	
