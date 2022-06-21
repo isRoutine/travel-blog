@@ -1,5 +1,7 @@
 package it.uniroma3.travelblog.authentication;
 
+import static it.uniroma3.travelblog.model.Credentials.ADMIN_ROLE;
+
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,8 +14,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
-import static it.uniroma3.travelblog.model.Credentials.ADMIN_ROLE;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @SuppressWarnings("deprecation")
 @Configuration
@@ -42,11 +43,16 @@ public class AuthConfiguration extends WebSecurityConfigurerAdapter {
                 /**TODO inserire oauth login **/
                 
                 /** logout **/
+                /** logout **/
                 .and().logout()
-                .logoutUrl("/logout")
-                .logoutSuccessUrl("/index")        
-                .invalidateHttpSession(true)
-                .clearAuthentication(true).permitAll();
+    			//il logout è attivato con una richiesta GET a "/logout"
+    			.logoutUrl("/logout")
+    			//in caso di successo, si viene reindirizzati all'index
+    			.logoutSuccessUrl("/")
+    			.invalidateHttpSession(true)
+    			.deleteCookies("JSESSIONID")
+    			.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+    			.clearAuthentication(true).permitAll();
     }
 
     /**

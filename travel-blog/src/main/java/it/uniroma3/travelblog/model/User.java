@@ -39,8 +39,9 @@ public class User {
 	
 	@NotNull
 	@NotBlank
-	//@UniqueElements
 	private String email;
+	
+	private String img;
 	
 	@OneToMany(mappedBy = "user")
 	private List<Experience> experiences;
@@ -114,5 +115,16 @@ public class User {
 		User other = (User) obj;
 		return Objects.equals(name, other.name) && Objects.equals(surname, other.surname);
 	}
+
+	public String getImg() {
+		return img;
+	}
+
+	public void setImg(String img) {
+		this.img = img;
+	}
 	
+	public void addExperience (Experience exp) {
+		this.experiences.add(exp);
+	}
 }
