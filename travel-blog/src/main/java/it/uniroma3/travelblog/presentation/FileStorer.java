@@ -10,8 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 public class FileStorer {
 
-	public static String uploadDirectory = System.getProperty("user.dir")+"/src/main/resources/static/images/";
-	
+	public static String uploadDirectory = System.getProperty("user.dir")+"/src/main/resources/static/images/";	
 	private static String setupDirName(String owner) {
 		return uploadDirectory+owner;
 	}

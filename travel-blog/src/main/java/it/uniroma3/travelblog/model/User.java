@@ -44,7 +44,7 @@ public class User {
 	
 	private String img;
 	
-	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "user")
 	private List<Experience> experiences;
 	
 	

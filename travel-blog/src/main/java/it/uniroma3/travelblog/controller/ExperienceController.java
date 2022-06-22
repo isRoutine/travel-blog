@@ -11,7 +11,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -91,17 +90,22 @@ public class ExperienceController {
     	User user = credentials.getUser();   	
 		exp.setUser(user);
 
+
+
+		// salvo solo l'utente perchè ho la cascade su experience
+		user.addExperience(exp);
+		User userSaved = this.userService.save(exp.getUser());
+		Experience expSaved = this.expService.save(exp);
+		
 		// questa parte non credo funzioni ancora...
 		// non viene creata la directory
 		int i=0;
 			for(MultipartFile file : files) {
-				exp.getImgs()[i] = FileStorer.store(file,  exp.getDirectoryName());
+				exp.getImgs()[i] = FileStorer.store(file, expSaved.getDirectoryName());
 				i++;
 		}
-
-		// salvo solo l'utente perchè ho la cascade su experience
-		user.addExperience(exp);
-		this.userService.save(exp.getUser());
+		this.expService.save(expSaved);
+		
 		return "redirect:/profile";
 	}	
 	
