@@ -48,24 +48,28 @@
 		
 		<div class="container my-5 border">
 			<div class="row my-4 d-flex justify-content-start border">
-				<h4 class="justify-content-center d-flex">Tutte le esperienze di Nome Cognome </h4>
+				<h4 class="justify-content-center d-flex" th:text="|Ciao ${user.name} ${user.surname}, ecco le tue esperienze|">
+				</h4>			
 			    <div class=" col  d-flex justify-content-end border m-3">
-			    	<a  th:href="@{'/experience/add/' + ${user.id}}" href="/" class="btn btn-primary">Aggiungi Esperienza</a>
+			    	<a  th:href="@{/experience/add}" href="/" class="btn btn-primary">Aggiungi Esperienza</a>
 			    </div>
 	
 				
 			</div>
 			
 			<div class=" d-flex row justify-content-start">
-				<div  th:each="experience : ${user.experiences}" class="col-md-6 col-lg-4 d-flex justify-content-center">
+				<div  th:each="experience : ${user.experiences}" class="col-md-6 col-lg-4 border justify-content-center">
 					<div class="card  my-2">
 						<img src="/images/mountain.png" class="card-img-top" alt="...">
 			  			<div class="card-body">
-			   				 <h5 class="card-title" >Esperienza #1</h5>
-			    			 <p class="card-text" >Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-			    			 <div class="container">
+			   				 <h5 class="card-title" th:text="${experience.name}">Nome esperienza</h5>
+			    			 <h5 class="card-text" th:text="${experience.description}">Descrizione esperienza</h5>
+			    			 <h5 class="card-title" th:text="|${experience.location.country}, ${experience.location.city} |"></h5>
+			    			 <h5 class="card-title" th:text="${experience.creationTime}">Data esperienza</h5>
+			    			 
+			    			 <div class="container mt-5">
 			    			 	<div class="row d-flex justify-content-center px-3 my-1">
-			    					<a  href="/" class="btn btn-outline-success">
+			    					<a  th:href="@{'/experience/modify/' + ${experience.id}}" href="/" class="btn btn-outline-success">
 			    						Modifica
 			    					</a>	    					
 			    			 	</div>		

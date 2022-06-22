@@ -23,6 +23,17 @@ public class ExperienceService {
 		this.expRepo.save(exp);
 	}
 	
+	@Transactional
+	public void update(Experience experience) {
+		// TODO Auto-generated method stub
+		Experience foo = this.expRepo.findById(experience.getId()).get();
+		foo.setName(experience.getName());
+		foo.setDescription(experience.getDescription());
+		foo.getLocation().setCountry(experience.getLocation().getCountry());
+		foo.getLocation().setCity(experience.getLocation().getCity());
+		this.expRepo.save(foo);
+	}
+	
 	public Experience findById(Long id) {
 		return this.expRepo.findById(id).get();
 	}

@@ -14,10 +14,10 @@ public class Location {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	
-	@UniqueElements
+	//@UniqueElements
 	private String country;
 	
-	@UniqueElements
+	//@UniqueElements
 	private String city;
 
 	public Long getId() {

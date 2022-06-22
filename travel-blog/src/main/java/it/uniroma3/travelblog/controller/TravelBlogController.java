@@ -15,11 +15,11 @@ public class TravelBlogController {
 	
 	@Autowired CredentialsService credentialsService;
 	
-	@GetMapping("/profile")
-	public String getProfile(Model model) {
-    	UserDetails userDetails = (UserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-    	Credentials credentials = credentialsService.findByUsername(userDetails.getUsername());
-		model.addAttribute("user", credentials.getUser());
-		return "profile";
-	}
+//	@GetMapping("/profile")
+//	public String getProfile(Model model) {
+//    	UserDetails userDetails = (UserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//    	Credentials credentials = credentialsService.findByUsername(userDetails.getUsername());
+//		model.addAttribute("user", credentials.getUser());
+//		return "profile";
+//	}
 }

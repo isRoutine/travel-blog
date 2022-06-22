@@ -124,8 +124,8 @@ public class AuthController {
     	
     	Credentials credentials = this.credentialsService.findByUsername(username);
     	
-		model.addAttribute("credentials", credentials);
-    	return "/profile";
+		model.addAttribute("user", credentials.getUser());
+    	return "profile";
     }
     
     @PostMapping("/profile/modify")

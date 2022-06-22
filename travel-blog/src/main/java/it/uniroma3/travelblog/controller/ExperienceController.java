@@ -7,6 +7,8 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -18,9 +20,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import it.uniroma3.travelblog.model.Credentials;
 import it.uniroma3.travelblog.model.Experience;
+import it.uniroma3.travelblog.model.Location;
 import it.uniroma3.travelblog.model.User;
 import it.uniroma3.travelblog.presentation.FileStorer;
+import it.uniroma3.travelblog.service.CredentialsService;
 import it.uniroma3.travelblog.service.ExperienceService;
 import it.uniroma3.travelblog.service.UserService;
 
@@ -36,6 +41,9 @@ public class ExperienceController {
 	@Autowired
 	private UserService userService;
 	
+	@Autowired
+	private CredentialsService credentialsService;	
+	
 	
 	private List<Experience> getSortedExperiences() {
 		List<Experience> experieces = this.expService.findAll();
@@ -47,32 +55,7 @@ public class ExperienceController {
 		});
 		return experieces;
 	}
-	
-	@PostMapping("/add")
-	public String addExperience(@Valid @ModelAttribute("experience") Experience exp, @RequestParam("file") MultipartFile[] files, BindingResult bindingResult, Model model) {
-		if(!bindingResult.hasErrors()) {
-			int i=0;
- 			for(MultipartFile file : files) {
- 				exp.getImgs()[i] = FileStorer.store(file,  exp.getDirectoryName());
- 				i++;
-			}
- 			exp.getUser().addExperience(exp);
- 			this.userService.save(exp.getUser());
-			this.expService.save(exp);
-			model.addAttribute("experience", this.expService.findById(exp.getId()));
-			return "/experience/info";
-		}
-		else return "/experience/form";
-	}
-	
-	@GetMapping("/add/{userId}")
-	public String addExperienceForm(@PathVariable Long userId, Model model) {
-		Experience experience = new Experience();
-		model.addAttribute("experience",experience);
-		model.addAttribute("userId",userId);
-		return "experience/addExperience";
-	}
-	
+		
 	@GetMapping("/{id}")
 	public String getExperience(@PathVariable("id") Long id, Model model) {
 		model.addAttribute("expereince", this.expService.findById(id));
@@ -84,6 +67,94 @@ public class ExperienceController {
 		model.addAttribute("experience", this.expService.findAll());
 		return "/experience/all";
 	}
+	
+	
+	@GetMapping("/add")
+	public String experienceForm(Model model) {
+
+		model.addAttribute("experience", new Experience());
+		model.addAttribute("location", new Location());
+		return "/experience/add";
+	}	
+	
+	@PostMapping("/add")
+	public String addExperience(@ModelAttribute("experience") Experience exp, @ModelAttribute("location") Location location,
+											@RequestParam("file") MultipartFile[] files ,Model model) {
+		
+		exp.setCreationTime(LocalDateTime.now());
+		exp.setLocation(location);
+		
+		// sfrutto le informazioni di spring security per ottenere l'utente attualmente loggato, senza dover 
+		// passare per parametri tramite url
+    	UserDetails userDetails = (UserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    	Credentials credentials = credentialsService.findByUsername(userDetails.getUsername());	
+    	User user = credentials.getUser();   	
+		exp.setUser(user);
+
+		// questa parte non credo funzioni ancora...
+		// non viene creata la directory
+		int i=0;
+			for(MultipartFile file : files) {
+				exp.getImgs()[i] = FileStorer.store(file,  exp.getDirectoryName());
+				i++;
+		}
+
+		// salvo solo l'utente perchè ho la cascade su experience
+		user.addExperience(exp);
+		this.userService.save(exp.getUser());
+		return "redirect:/profile";
+	}	
+	
+	
+	
+//	@PostMapping("/add")
+//	public String addExperience(@Valid @ModelAttribute("experience") Experience exp, @RequestParam("file") MultipartFile[] files, BindingResult bindingResult, Model model) {
+//		if(!bindingResult.hasErrors()) {
+//			int i=0;
+// 			for(MultipartFile file : files) {
+// 				exp.getImgs()[i] = FileStorer.store(file,  exp.getDirectoryName());
+// 				i++;
+//			}
+// 			exp.getUser().addExperience(exp);
+// 			this.userService.save(exp.getUser());
+//			this.expService.save(exp);
+//			model.addAttribute("experience", this.expService.findById(exp.getId()));
+//			return "/experience/info";
+//		}
+//		else return "/experience/form";
+//	}	
+	
+
+	@GetMapping("/modify/{id}")
+	public String experienceModify(@PathVariable("id") Long id, Model model) {
+		Experience oldExperience =  this.expService.findById(id);
+		model.addAttribute("experience", oldExperience);
+		return "experience/modify";
+	}
+	
+	@PostMapping("/modify")
+	public String experienceUpdate(@Valid @ModelAttribute("experience")Experience exp, Model model) {
+//		if(!bindingResult.hasErrors()) {
+//			FileStorer.dirRename(this.expService.findById(exp.getId()).getDirectoryName() , exp.getDirectoryName());
+//			if (files != null) {
+//				FileStorer.dirEmpty(exp.getDirectoryName());
+//				exp.emptyImgs();
+//				int i=0;
+//				for(MultipartFile file : files) {
+//					if(!file.isEmpty()) {
+//						exp.getImgs()[i]= FileStorer.store(file, exp.getDirectoryName());
+//						i++;
+//					}
+//				}
+//			}
+			
+			this.expService.update(exp);
+			return "redirect:/profile";
+//		}
+//		else return "/experience/modify";
+	}
+	
+	
 	
 	@GetMapping("/delete/{id}")
 	public String deleteExperience(@PathVariable("id") Long id, Model model) {
@@ -109,19 +180,6 @@ public class ExperienceController {
 		return "experience/modify";
 	}
 	
-	
-	/*
-	 * suppongo di avere l'id dell'user
-	 */
-	@GetMapping("/form/{id}")
-	public String expereinceForm(@PathVariable("id") Long id, Model model) {
-		Experience exp =  new Experience();
-		User usr = this.userService.findById(id);
-		exp.setCreationTime(LocalDateTime.now());
-		exp.setUser(usr);
-		model.addAttribute("expereince",exp);
-		return "expereince.html";
-	}
 	
 	/**Primo metodo da invocare per ottenere la home page**/
 	@GetMapping("/home/get")
@@ -159,35 +217,5 @@ public class ExperienceController {
 		return "/experience/all";
 	}
 
-	
-	@GetMapping("/modify/{id}")
-	public String experienceModify(@PathVariable("id") Long id, Model model) {
-		Experience oldExperience =  this.expService.findById(id);
-		model.addAttribute("experience", oldExperience);
-		return "experience/modify";
-	}
-	
-	@PostMapping("/modify")
-	public String experienceUpdate(@Valid @ModelAttribute("experience")Experience exp, @RequestParam("files")MultipartFile[] files, BindingResult bindingResult, Model model) {
-		if(!bindingResult.hasErrors()) {
-			FileStorer.dirRename(this.expService.findById(exp.getId()).getDirectoryName() , exp.getDirectoryName());
-			if (files != null) {
-				FileStorer.dirEmpty(exp.getDirectoryName());
-				exp.emptyImgs();
-				int i=0;
-				for(MultipartFile file : files) {
-					if(!file.isEmpty()) {
-						exp.getImgs()[i]= FileStorer.store(file, exp.getDirectoryName());
-						i++;
-					}
-				}
-			}
-			
-			this.expService.save(exp);
-			model.addAttribute("expereince", this.expService.findById(exp.getId()));
-			return "/expereince/info";
-		}
-		else return "/experience/modify";
-	}
 	
 }
