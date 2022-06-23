@@ -18,6 +18,7 @@ public class FileStorer {
 	public static String store(MultipartFile file, String owner) {
 		new File(setupDirName(owner)).mkdir();
 		Path fileNameAndPath  = Paths.get(setupDirName(owner), file.getOriginalFilename());
+		System.out.println(fileNameAndPath);
 		try {
 			Files.write(fileNameAndPath, file.getBytes());
 			
