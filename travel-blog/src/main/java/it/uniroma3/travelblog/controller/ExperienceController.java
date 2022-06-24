@@ -208,7 +208,7 @@ public class ExperienceController {
 		Integer currPage = page+1;
 		model.addAttribute("currPage", currPage);
 		model.addAttribute("experiences", experieces.subList(currPage*EXP_FOR_PAGE, (currPage*EXP_FOR_PAGE)+EXP_FOR_PAGE));
-		return "/experience/all";
+		return "/experience/all"; // ritornriamo sempre l'index ...
 	}
 	
 	/**Metodo da invocare per ottenere il caricamento delle esperienze della pagina precedente**/

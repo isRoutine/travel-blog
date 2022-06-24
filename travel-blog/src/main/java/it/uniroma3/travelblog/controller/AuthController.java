@@ -20,6 +20,7 @@ import it.uniroma3.travelblog.model.Credentials;
 import it.uniroma3.travelblog.model.User;
 import it.uniroma3.travelblog.presentation.FileStorer;
 import it.uniroma3.travelblog.service.CredentialsService;
+import it.uniroma3.travelblog.service.UserService;
 import it.uniroma3.travelblog.validator.CredentialsValidator;
 import it.uniroma3.travelblog.validator.UserValidator;
 
@@ -34,6 +35,8 @@ public class AuthController {
 	
 	@Autowired
 	private CredentialsValidator credentialsValidator;
+
+	@Autowired private UserService userService;
 	
 	@GetMapping("/register")
 	public String showRegisterForm(Model model) {
@@ -125,6 +128,12 @@ public class AuthController {
     	Credentials credentials = this.credentialsService.findByUsername(username);
     	
 		model.addAttribute("user", credentials.getUser());
+    	return "profile";
+    }
+    
+    @GetMapping("/profile/{id}")
+    public String getProfile(@PathVariable("id") Long id, Model model) {
+		model.addAttribute("user", this.userService.findById(id));
     	return "profile";
     }
     
