@@ -5,18 +5,20 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Optional;
 
 import org.springframework.web.multipart.MultipartFile;
 
 public class FileStorer {
 
 	public static String uploadDirectory = System.getProperty("user.dir")+"/src/main/resources/static/images/";	
+	
 	private static String setupDirName(String owner) {
 		return uploadDirectory+owner;
 	}
 	
 	public static String store(MultipartFile file, String owner) {
-		new File(setupDirName(owner)).mkdir();
+		new File(setupDirName(owner)).mkdirs();
 		Path fileNameAndPath  = Paths.get(setupDirName(owner), file.getOriginalFilename());
 		System.out.println(fileNameAndPath);
 		try {

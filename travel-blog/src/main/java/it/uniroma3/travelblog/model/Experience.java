@@ -114,8 +114,7 @@ public class Experience{
 	public String getDirectoryName() {
 		//return this.getUser().getName().replaceAll("\\s+","_")+ "_" +this.getUser().getSurname().replaceAll("\\s+","_")+ "/" + this.getName().replaceAll("\\s+","_");
 		//String path = this.getUser().getId().toString().replaceAll("\\s+","_")+"/"+this.getId().toString().replaceAll("\\s+","_");
-		//String path = "id" + this.getUser().getId() + "/exp" + this.getId();
-		String path = "id" + this.getUser().getId()+ "/exp" + this.getId() + "/";
+		String path = "id" + this.getUser().getId() + "/exp" + this.getId();
 		System.out.println(path);
 		return path;
 		//return this.getUser().getName().replaceAll("\\s+","_");

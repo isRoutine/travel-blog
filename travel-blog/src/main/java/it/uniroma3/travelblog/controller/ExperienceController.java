@@ -165,7 +165,7 @@ public class ExperienceController {
 		Experience exp = this.expService.findById(id);
 		FileStorer.removeImgsAndDir(exp.getDirectoryName(), exp.getImgs());
 		this.expService.deleteById(id);
-		return "index.html";
+		return "redirect:/profile";
 	}
 	
 	@GetMapping("/delete/{id}/{img}")
