@@ -1,0 +1,22 @@
+.main-row{
+	height: 20vw;
+ 	background-size: cover;
+  	background-position: center;
+  	background-repeat: no-repeat;
+  	background-image: linear-gradient(rgba(100, 100, 100, 0.4), rgba(100, 100, 100, 0.4)), url("/images/default/profileBg.jpg");
+  	display: flex;
+}
+
+.title-frame{
+	display: flex;
+}
+
+.title{	
+	font-size: 4.5rem;
+/* 	font-weight: bold; */
+	color: white;
+
+	text-align: center;
+	border-bottom: 3px solid #fff;
+	
+}

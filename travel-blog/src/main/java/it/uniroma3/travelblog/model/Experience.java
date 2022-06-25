@@ -1,23 +1,22 @@
 package it.uniroma3.travelblog.model;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Objects;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 
 @Entity
-public class Experience {
+public class Experience{
 
 	private final static int sLength = 1024;
+	private static final int MAX_IMGS = 5;
 	
 	@Id 
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -29,22 +28,20 @@ public class Experience {
 	@Column(length = sLength)
 	private String description;
 	
-	@NotBlank
-	@NotNull
+	//@NotBlank
+	//@NotNull
 	private LocalDateTime creationTime;
 	
-	@OneToMany
-	private List<Image> imgs;
+	private String[] imgs;
 	
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.ALL)
 	private Location location;
 	
 	@ManyToOne
 	private User user;
 	
-	
 	public Experience() {
-		this.imgs = new ArrayList<Image>();
+		this.imgs = new String[MAX_IMGS];
 	}
 
 	public Long getId() {
@@ -71,11 +68,11 @@ public class Experience {
 		this.creationTime = creationTime;
 	}
 
-	public List<Image> getImg() {
+	public String[] getImgs() {
 		return imgs;
 	}
 
-	public void setImg(List<Image> imgs) {
+	public void setImgs(String[] imgs) {
 		this.imgs = imgs;
 	}
 
@@ -103,10 +100,43 @@ public class Experience {
 	public void setName(String name) {
 		this.name = name;
 	}
+	
+	public void emptyImgs() {
+		this.imgs = new String[MAX_IMGS];
+	}
 
-	public void addImage(Image img) {
-		this.imgs.add(img);
+	public void removeImg(String img) {
+		for(int i = 0; i < this.imgs.length; i++) {
+			if(this.imgs[i] != null && this.imgs[i].equals(img)) this.imgs[i]=null;
+		}
 	}
 	
+	public String getDirectoryName() {
+		//return this.getUser().getName().replaceAll("\\s+","_")+ "_" +this.getUser().getSurname().replaceAll("\\s+","_")+ "/" + this.getName().replaceAll("\\s+","_");
+		//String path = this.getUser().getId().toString().replaceAll("\\s+","_")+"/"+this.getId().toString().replaceAll("\\s+","_");
+		String path = "user" + this.getUser().getId() + "/exp" + this.getId();
+		System.out.println(path);
+		return path;
+		//return this.getUser().getName().replaceAll("\\s+","_");
+		
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(creationTime, name, user);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Experience other = (Experience) obj;
+		return Objects.equals(creationTime, other.creationTime) && Objects.equals(name, other.name)
+				&& Objects.equals(user, other.user);
+	}
 	
 }
