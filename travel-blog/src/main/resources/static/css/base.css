@@ -1,0 +1,61 @@
+
+/* CUSTOMIZE THE NAVBAR
+-------------------------------------------------- */
+header{
+	position: absolute;
+	width: 100%;
+}
+
+.navbar{
+	z-index: 2;
+	display: flex;
+}
+
+.nav-item .nav-link{
+	color: WhiteSmoke !important;
+	font-size: 2rem;
+	padding-top: 0px;
+	padding-bottom: 3px;
+	margin: 8px;
+	
+}
+
+.nav-item a span:hover{
+	color: SandyBrown !important;
+}
+
+.bi-basket2-fill{
+	color: WhiteSmoke;
+	width: 2rem;
+	margin-top: 0.7rem;
+	margin-right: 1rem;
+}
+
+.bi-basket2-fill :hover{
+	color: SandyBrown;
+}
+
+/* CUSTOMIZE THE FOOTER
+-------------------------------------------------- */
+.footer-container{
+	display: flex;
+}
+
+.company-name{	
+	font-size: 3rem;
+}
+
+.featurette-divider {
+  margin: 1.5rem 0; /* Space out the Bootstrap <hr> more */
+}
+
+/* RESPONSIVE
+------------------------- */
+@media (max-width: 991px) {
+	
+	.nav-item .nav-link{
+		padding-left: 1%;
+		font-size: 1.5rem;
+	}
+}
+
