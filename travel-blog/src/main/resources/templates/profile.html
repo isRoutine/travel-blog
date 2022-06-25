@@ -41,8 +41,8 @@
 			          <div class="mb-1 text-muted" th:text="${user.email}">travelblog@email.com</div>
 			          <div class="mb-1 text-muted" th:text="${user.birthDate}">01/01/01</div>
 			          <div class="btn-group align-self-start mt-3" role="group">
-			          	<a  href="/"  class="btn btn-sm btn-outline-primary">Modifica Profilo</a>	
-			          	<a  href="/"  class="btn btn-sm btn-outline-danger">Elimina Profilo</a>	
+			          	<a  th:href="@{/user/modify}"  class="btn btn-sm btn-outline-primary">Modifica Profilo</a>	
+			          	<a  th:href="@{'/user/delete/' + *{id}}"  class="btn btn-sm btn-outline-danger">Elimina Profilo</a>	
 			          	<a  th:href="@{/experience/add}" href="/" class="btn btn-sm btn-outline-success">Aggiungi Esperienza</a>
 			          </div>
 			        </div>

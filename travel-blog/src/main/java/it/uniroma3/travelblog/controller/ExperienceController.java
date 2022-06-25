@@ -11,6 +11,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -140,25 +141,12 @@ public class ExperienceController {
 	}
 	
 	@PostMapping("/modify")
-	public String experienceUpdate(@Valid @ModelAttribute("experience")Experience exp, Model model) {
-//		if(!bindingResult.hasErrors()) {
-//			FileStorer.dirRename(this.expService.findById(exp.getId()).getDirectoryName() , exp.getDirectoryName());
-//			if (files != null) {
-//				FileStorer.dirEmpty(exp.getDirectoryName());
-//				exp.emptyImgs();
-//				int i=0;
-//				for(MultipartFile file : files) {
-//					if(!file.isEmpty()) {
-//						exp.getImgs()[i]= FileStorer.store(file, exp.getDirectoryName());
-//						i++;
-//					}
-//				}
-//			}
-			
+	public String experienceUpdate(@Valid @ModelAttribute("experience")Experience exp, BindingResult bindingResult, Model model) {
+		if(!bindingResult.hasErrors()) {
 			this.expService.update(exp);
 			return "redirect:/profile";
-//		}
-//		else return "/experience/modify";
+		}
+		else return "/experience/modify";
 	}
 	
 	
@@ -171,21 +159,6 @@ public class ExperienceController {
 		return "redirect:/profile";
 	}
 	
-	@GetMapping("/delete/{id}/{img}")
-	public String deleteImage(@PathVariable("id") Long id, @PathVariable("img") String img, Model model) {
-		Experience exp = this.expService.findById(id);
-		for(String currImg : exp.getImgs()) {
-			if(currImg != null && currImg.equals(img)) {
-				exp.removeImg(img);
-				FileStorer.removeImg(exp.getDirectoryName(), img);
-			}
-			
-		}
-			
-		this.expService.save(exp);
-		model.addAttribute("expereince", this.expService.findById(id));
-		return "experience/modify";
-	}
 	
 	
 	/**Primo metodo da invocare per ottenere la home page**/

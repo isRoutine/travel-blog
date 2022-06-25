@@ -59,8 +59,8 @@ public class AuthController {
     @GetMapping("/default")
     public String defaultAfterLogin(Model model) {
         
-    	UserDetails userDetails = (UserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-    	Credentials credentials = credentialsService.findByUsername(userDetails.getUsername());
+//    	UserDetails userDetails = (UserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//    	Credentials credentials = credentialsService.findByUsername(userDetails.getUsername());
 //    	if (credentials.getRole().equals(Credentials.ADMIN_ROLE)) {
 //            return "admin/home";
 //        }
@@ -78,8 +78,10 @@ public class AuthController {
         	credentials.setUser(user);
             credentialsService.save(credentials);
             
-        	user.setImg(FileStorer.store(file, user.getDirectoryName()));
-        	userService.save(user);
+            if(!file.isEmpty()) {
+            	user.setImg(FileStorer.store(file, user.getDirectoryName()));
+            	userService.save(user);
+            }
             
             return "registrationSuccessful";
         }
@@ -107,22 +109,10 @@ public class AuthController {
 		credentials.getUser().setImg(null);			
 		this.credentialsService.update(credentials);
 		
-		return this.getProfile(model);
+		return this.modifyUser(model);
 	}
     
-    
-    @GetMapping("/admin/promote")
-    public String promoteUser() {
-    	return "/admin/promote";
-    }
-    
-    @PostMapping("/admin/promote/finalize")
-    public String promotion(@ModelAttribute("username") String username, BindingResult userBindingResult, Model model) {
-    	this.credentialsService.promote(username);
-    	return "admin/home";
-    }
-    
-    @GetMapping("/profile")
+	@GetMapping("/profile")
     public String getProfile(Model model) {
     	
     	Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -130,24 +120,33 @@ public class AuthController {
     	
     	Credentials credentials = this.credentialsService.findByUsername(username);
     	
-		model.addAttribute("user", credentials.getUser());
-    	return "profile";
+    	model.addAttribute("user", credentials.getUser());
+    	return "/profile";
     }
-    
+	
     @GetMapping("/profile/{id}")
     public String getProfile(@PathVariable("id") Long id, Model model) {
 		model.addAttribute("user", this.userService.findById(id));
     	return "profile";
     }
     
-    @PostMapping("/profile/modify")
-	public String updateChef(@ModelAttribute("credentials")Credentials credentials, @RequestParam("file")MultipartFile file, BindingResult bindingResult, Model model) {
+    @GetMapping("/user/modify")
+    public String modifyUser(Model model) {
+    	
+    	Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    	String username = ((UserDetails)principal).getUsername();
+    	Credentials credentials = this.credentialsService.findByUsername(username);
+    	
+		model.addAttribute("credentials", credentials);
+    	return "/user/modify";
+    }
+    
+    @PostMapping("/user/modify")
+	public String updateProfile(@ModelAttribute("credentials") Credentials credentials, BindingResult bindingResult,@RequestParam("file")MultipartFile file, Model model) {
     	this.userValidator.validate(credentials.getUser(), bindingResult);
-    	this.credentialsValidator.validate(credentials, bindingResult);
+        this.credentialsValidator.validate(credentials, bindingResult);
 		
     	if(!bindingResult.hasErrors()) {
-			FileStorer.dirRename(this.credentialsService.findById(credentials.getId()).getDirectoryName() , credentials.getDirectoryName());
-			
 			if(!file.isEmpty()) {
 				FileStorer.removeImgAndDir(credentials.getDirectoryName(), credentials.getUser().getImg());
 				credentials.getUser().setImg(FileStorer.store(file, credentials.getDirectoryName()));
