@@ -128,4 +128,8 @@ public class User {
 	public void addExperience (Experience exp) {
 		this.experiences.add(exp);
 	}
+	
+	public String getDirectoryName() {
+		return "user" + this.getId();
+	}
 }

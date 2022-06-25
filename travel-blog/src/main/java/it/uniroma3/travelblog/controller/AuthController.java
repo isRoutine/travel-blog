@@ -36,7 +36,8 @@ public class AuthController {
 	@Autowired
 	private CredentialsValidator credentialsValidator;
 
-	@Autowired private UserService userService;
+	@Autowired 
+	private UserService userService;
 	
 	@GetMapping("/register")
 	public String showRegisterForm(Model model) {
@@ -72,12 +73,14 @@ public class AuthController {
 
         this.userValidator.validate(user, userBindingResult);
         this.credentialsValidator.validate(credentials, credentialsBindingResult);
-
+        
         if(!userBindingResult.hasErrors() && !credentialsBindingResult.hasErrors()) {
-        	user.setImg(FileStorer.store(file, credentials.getDirectoryName()));
-        	
-            credentials.setUser(user);
+        	credentials.setUser(user);
             credentialsService.save(credentials);
+            
+        	user.setImg(FileStorer.store(file, user.getDirectoryName()));
+        	userService.save(user);
+            
             return "registrationSuccessful";
         }
         return "signUp";
