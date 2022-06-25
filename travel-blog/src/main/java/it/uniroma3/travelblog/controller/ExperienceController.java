@@ -1,14 +1,13 @@
 package it.uniroma3.travelblog.controller;
 
 import java.time.LocalDateTime;
-import java.util.Comparator;
-import java.util.List;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,7 +37,7 @@ public class ExperienceController {
 	private ExperienceService expService;
 	
 	@Autowired
-	private UserService userService;
+	private UserService userService;	
 	
 	@Autowired
 	private CredentialsService credentialsService;	
@@ -73,18 +72,27 @@ public class ExperienceController {
 		exp.setLocation(location);
 		
 		// sfrutto le informazioni di spring security per ottenere l'utente attualmente loggato, senza dover 
-		// passare per parametri tramite url
-    	UserDetails userDetails = (UserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-    	Credentials credentials = credentialsService.findByUsername(userDetails.getUsername());	
-    	User user = credentials.getUser();   	
-		exp.setUser(user);
+		// passare per parametri tramite url 	
 
+    	User user;
+    	try { // loggato normalmente
+			UserDetails userDetails = (UserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+	    	Credentials credentials = credentialsService.findByUsername(userDetails.getUsername());	
+        	user = credentials.getUser();
+        	
+    	} catch(Exception e){ // loggato con oauth
+        	OAuth2User userDetails = (OAuth2User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        	String email = userDetails.getAttribute("email");
+        	user = userService.findByEmail(email);
+    	} 
 
 
 		// salvo solo l'utente perchè ho la cascade su experience
+    	exp.setUser(user);
 		user.addExperience(exp);
-		User userSaved = this.userService.save(exp.getUser());
+		this.userService.save(user);
 		Experience expSaved = this.expService.save(exp);
+		
 		
 		// questa parte non credo funzioni ancora...
 		// non viene creata la directory
@@ -96,29 +104,12 @@ public class ExperienceController {
 			}
 			this.expService.save(expSaved);
 		}
+			
 		
 		
 		return "redirect:/profile";
 	}	
-	
-	
-	
-//	@PostMapping("/add")
-//	public String addExperience(@Valid @ModelAttribute("experience") Experience exp, @RequestParam("file") MultipartFile[] files, BindingResult bindingResult, Model model) {
-//		if(!bindingResult.hasErrors()) {
-//			int i=0;
-// 			for(MultipartFile file : files) {
-// 				exp.getImgs()[i] = FileStorer.store(file,  exp.getDirectoryName());
-// 				i++;
-//			}
-// 			exp.getUser().addExperience(exp);
-// 			this.userService.save(exp.getUser());
-//			this.expService.save(exp);
-//			model.addAttribute("experience", this.expService.findById(exp.getId()));
-//			return "/experience/info";
-//		}
-//		else return "/experience/form";
-//	}	
+		
 	
 
 	@GetMapping("/modify/{id}")
