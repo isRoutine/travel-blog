@@ -189,7 +189,7 @@ public class ExperienceController {
 	
 	
 	/**Primo metodo da invocare per ottenere la home page**/
-	@GetMapping("/home/get")
+	@GetMapping("/")
 	public String getExperiencesHome(Model model) {
 		List<Experience> experieces = this.expService.findAll();
 		experieces.sort(new Comparator<Experience>() {
@@ -201,27 +201,27 @@ public class ExperienceController {
 		
 		model.addAttribute("currPage", 0);
 		model.addAttribute("experiences", experieces.subList(0, EXP_FOR_PAGE));
-		return "/experience/all";
+		return "index";
 	}
 	
 	/**Metodo da invocare per ottenere il caricamento delle esperienze della pagina successiva**/
-	@GetMapping("/home/next/{page}")
+	@GetMapping("/next/{page}")
 	public String getNextExperiences(@PathVariable("page") Integer page, Model model) {
 		List<Experience> experieces = getSortedExperiences();
 		Integer currPage = page+1;
 		model.addAttribute("currPage", currPage);
 		model.addAttribute("experiences", experieces.subList(currPage*EXP_FOR_PAGE, (currPage*EXP_FOR_PAGE)+EXP_FOR_PAGE));
-		return "/experience/all"; // ritornriamo sempre l'index ...
+		return "index"; // ritornriamo sempre l'index ...
 	}
 	
 	/**Metodo da invocare per ottenere il caricamento delle esperienze della pagina precedente**/
-	@GetMapping("/home/prev/{page}")
+	@GetMapping("/prev/{page}")
 	public String getPrevExperiences(@PathVariable("page") Integer page, Model model) {
 		List<Experience> experieces = getSortedExperiences();
 		Integer currPage = page-1;
 		model.addAttribute("currPage", currPage);
 		model.addAttribute("experiences", experieces.subList(currPage*EXP_FOR_PAGE, (currPage*EXP_FOR_PAGE)+EXP_FOR_PAGE));
-		return "/experience/all";
+		return "index";
 	}
 
 	
