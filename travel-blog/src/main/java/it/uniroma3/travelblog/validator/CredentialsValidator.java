@@ -27,17 +27,13 @@ public class CredentialsValidator implements Validator {
         String username = credentials.getUsername().trim();
         String password = credentials.getPassword().trim();
 
-        if (username.isEmpty())
-            errors.rejectValue("username", "required");
-        else if (username.length() < MIN_USERNAME_LENGTH || username.length() > MAX_USERNAME_LENGTH)
-            errors.rejectValue("username", "size");
+        if (username.length() < MIN_USERNAME_LENGTH || username.length() > MAX_USERNAME_LENGTH)
+            errors.reject("username.size");
         else if (this.credentialsService.findByUsername(username) != null)
-            errors.rejectValue("username", "duplicate");
+            errors.reject("username.duplicate");
 
-        if (password.isEmpty())
-            errors.rejectValue("password", "required");
-        else if (password.length() < MIN_PASSWORD_LENGTH || password.length() > MAX_PASSWORD_LENGTH)
-            errors.rejectValue("password", "size");
+        if (password.length() < MIN_PASSWORD_LENGTH || password.length() > MAX_PASSWORD_LENGTH)
+            errors.reject("password.size");
     }
 
     @Override
