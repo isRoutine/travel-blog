@@ -12,9 +12,9 @@ public class TravelBlogController {
 	
 	@Autowired ExperienceService expService;
 	
-//	@GetMapping("/")
-//	public String getHomePage(Model model) {
-//		model.addAttribute("experiences", this.expService.findAll());
-//		return "index";
-//	}
+	@GetMapping("/")
+	public String getHomePage(Model model) {
+		model.addAttribute("experiences", this.expService.findAll());
+		return "index";
+	}
 }
