@@ -40,9 +40,9 @@
 			          <h3 class="mb-0" th:text="|${user.name} ${user.surname} - ${user.id}|">Nome Cognome - id</h3>
 			          <div class="mb-1 text-muted" th:text="${user.email}">travelblog@email.com</div>
 			          <div class="mb-1 text-muted" th:text="${user.birthDate}">01/01/01</div>
-			          <div class="btn-group align-self-start mt-3" role="group">
+			          <div th:if="${me == user.id}" class="btn-group align-self-start mt-3" role="group">
 			          	<a  th:href="@{/user/modify}"  class="btn btn-sm btn-outline-primary">Modifica Profilo</a>	
-			          	<a  th:href="@{'/user/delete/' + *{id}}"  class="btn btn-sm btn-outline-danger">Elimina Profilo</a>	
+			          	<a  th:href="@{'/user/delete/' + ${user.id}}"  class="btn btn-sm btn-outline-danger">Elimina Profilo</a>	
 			          	<a  th:href="@{/experience/add}" href="/" class="btn btn-sm btn-outline-success">Aggiungi Esperienza</a>
 			          </div>
 			        </div>
@@ -69,7 +69,7 @@
 		    					<h5 class="card-text" th:text="${experience.description}">Descrizione esperienza</h5>
 		    					<h5 class="card-text text-muted" th:text="|${experience.location.country}, ${experience.location.city} |">Location Esperienza</h5>
 				    			<h5 class="card-text text-muted" th:text="${experience.creationTime.toString().substring(0,10)}">Data esperienza</h5>
-		    					<div>
+		    					<div th:if="${me == user.id}" >
     								<a th:href="@{'/experience/delete/' + ${experience.id}}" class="btn btn-sm btn-outline-danger">Elimina</a>
 				                  	<a th:href="@{'/experience/modify/' + ${experience.id}}" class="btn btn-sm btn-outline-secondary">Modifica</a>
 				                </div>

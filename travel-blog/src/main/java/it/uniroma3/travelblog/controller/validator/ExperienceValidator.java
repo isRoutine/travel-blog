@@ -37,8 +37,8 @@ public class ExperienceValidator implements Validator {
             errors.rejectValue("description", "desc.size");
         
         if(experience.getId() == null || !experience.getName().equals(this.expService.findById(experience.getId()).getName())) {
-        	if(this.expService.existByUserAndDescription(experience)){
-        		errors.reject("espereinza.duplicato");
+        	if(this.expService.existByName(experience)){
+        		errors.rejectValue("name", "experience.duplication");
         	}
         }
 	}

@@ -160,6 +160,19 @@ public class AuthController {
     @GetMapping("/profile/{id}")
     public String getProfile(@PathVariable("id") Long id, Model model) {
 		model.addAttribute("user", userService.findById(id));
+		
+		try {
+	    	Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+	    	String username = ((UserDetails)principal).getUsername();
+	    	Credentials credentials = this.credentialsService.findByUsername(username);
+			model.addAttribute("me", credentials.getUser().getId());  
+    	} catch(Exception e) {
+        	OAuth2User userDetails = (OAuth2User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        	String email = userDetails.getAttribute("email");
+        	model.addAttribute("me", this.userService.findByEmail(email).getId());   		
+    	}
+		
+		
     	return "profile";
     }
     

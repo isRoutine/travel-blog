@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import it.uniroma3.travelblog.controller.validator.ExperienceValidator;
 import it.uniroma3.travelblog.model.Credentials;
 import it.uniroma3.travelblog.model.Experience;
 import it.uniroma3.travelblog.model.Location;
@@ -32,10 +33,11 @@ import it.uniroma3.travelblog.service.UserService;
 @RequestMapping("/experience")
 public class ExperienceController {
 	
-
-
 	@Autowired
 	private ExperienceService expService;
+	
+	@Autowired
+	private ExperienceValidator experienceValidator;
 	
 	@Autowired
 	private UserService userService;	
@@ -66,49 +68,52 @@ public class ExperienceController {
 	}	
 	
 	@PostMapping("/add")
-	public String addExperience(@ModelAttribute("experience") Experience exp, @ModelAttribute("location") Location location,
-											@RequestParam("file") MultipartFile[] files ,Model model) {
+	public String addExperience(@ModelAttribute("experience") Experience exp, BindingResult bindingResult, @ModelAttribute("location") Location location, @RequestParam("file") MultipartFile[] files ,Model model) {
 		
-		exp.setCreationTime(LocalDateTime.now());
-		exp.setLocation(location);
+		this.experienceValidator.validate(exp, bindingResult);
 		
-		// sfrutto le informazioni di spring security per ottenere l'utente attualmente loggato, senza dover 
-		// passare per parametri tramite url 	
-
-    	User user;
-    	try { // loggato normalmente
-			UserDetails userDetails = (UserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-	    	Credentials credentials = credentialsService.findByUsername(userDetails.getUsername());	
-        	user = credentials.getUser();
-        	
-    	} catch(Exception e){ // loggato con oauth
-        	OAuth2User userDetails = (OAuth2User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        	String email = userDetails.getAttribute("email");
-        	user = userService.findByEmail(email);
-    	} 
-
-
-		// salvo solo l'utente perchè ho la cascade su experience
-    	exp.setUser(user);
-		user.addExperience(exp);
-		this.userService.save(user);
-		Experience expSaved = this.expService.save(exp);
-		
-		
-		// questa parte non credo funzioni ancora...
-		// non viene creata la directory
-		if(!files[0].isEmpty()){
-			int i=0;
-			for(MultipartFile file : files) {
-				exp.getImgs()[i] = FileStorer.store(file, expSaved.getDirectoryName());
-				i++;
-			}
-			this.expService.save(expSaved);
-		}
+		if(!bindingResult.hasErrors()) {
+			exp.setCreationTime(LocalDateTime.now());
+			exp.setLocation(location);
 			
+			// sfrutto le informazioni di spring security per ottenere l'utente attualmente loggato, senza dover 
+			// passare per parametri tramite url 	
+
+	    	User user;
+	    	try { // loggato normalmente
+				UserDetails userDetails = (UserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		    	Credentials credentials = credentialsService.findByUsername(userDetails.getUsername());	
+	        	user = credentials.getUser();
+	        	
+	    	} catch(Exception e){ // loggato con oauth
+	        	OAuth2User userDetails = (OAuth2User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+	        	String email = userDetails.getAttribute("email");
+	        	user = userService.findByEmail(email);
+	    	} 
+
+
+			// salvo solo l'utente perchè ho la cascade su experience
+	    	exp.setUser(user);
+			user.addExperience(exp);
+			this.userService.save(user);
+			Experience expSaved = this.expService.save(exp);
+			
+			
+			// questa parte non credo funzioni ancora...
+			// non viene creata la directory
+			if(!files[0].isEmpty()){
+				int i=0;
+				for(MultipartFile file : files) {
+					exp.getImgs()[i] = FileStorer.store(file, expSaved.getDirectoryName());
+					i++;
+				}
+				this.expService.save(expSaved);
+			}
 		
+			return "redirect:/profile";
+		}
 		
-		return "redirect:/profile";
+		return "experience/add";
 	}	
 		
 	

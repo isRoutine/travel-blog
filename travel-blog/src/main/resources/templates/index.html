@@ -31,8 +31,9 @@
 		<div class="card shadow">
 			<div class="container px-0">		    	
 		    	<div class="container d-flex align-items-center mx-3 my-3">
-		    		<img src="/images/blue.jpeg" class="rounded-circle" style ="width:5rem" alt="...">
-		    		<a th:href="@{'/profile/' + ${experience.user.id}}" class="btn btn-outline-primary my-2 mx-5" th:text="|${experience.user.name} ${experience.user.surname}|"></a>		    	
+		    		<img th:if="${experience.user.img}"  th:src="@{'/images/' + ${experience.user.getDirectoryName()} + '/' + ${experience.user.img}}" class="rounded" style ="width:5rem" alt="...">
+		    		<img th:if="${experience.user.img == null}"  src="/images/default/profile.png" class="rounded" style ="width:5rem" alt="...">
+		    		<a th:href="@{'/profile/' + ${experience.user.id}}" class="text-muted profile-name m-3" th:text="|${experience.user.name} ${experience.user.surname}|"></a>		    	
 		    	</div>	
 			
 				<div th:id=" 'carouselExampleControls' + ${experience.id}" class="carousel slide" data-ride="carousel">
@@ -58,10 +59,9 @@
 				</div>			
 			
 			</div>
-		    	<div class="container d-flex mb-0 p-1  justify-content-center bg-primary text-white font-weight-light">
-		    		<div th:text="|${experience.location.city},${experience.location.country}|"></div>
-		    	</div>			
+		   			
 		  	<div class="card-body">
+		  		<span class="badge badge-success card-text float-right" th:text="|${experience.location.city}, ${experience.location.country}|"></span>	
 		    	<h3 th:text="${experience.name}"class="card-title">Card title</h3>
 		    	<p th:text="${experience.description}" class="card-text">Descrizione</p>
 		    	<div class="container d-flex justify-content-end">
