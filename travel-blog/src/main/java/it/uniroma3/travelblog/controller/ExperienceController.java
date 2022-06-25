@@ -99,12 +99,15 @@ public class ExperienceController {
 		
 		// questa parte non credo funzioni ancora...
 		// non viene creata la directory
-		int i=0;
+		if(!files[0].isEmpty()){
+			int i=0;
 			for(MultipartFile file : files) {
 				exp.getImgs()[i] = FileStorer.store(file, expSaved.getDirectoryName());
 				i++;
+			}
+			this.expService.save(expSaved);
 		}
-		this.expService.save(expSaved);
+		
 		
 		return "redirect:/profile";
 	}	
