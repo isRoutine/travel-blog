@@ -33,6 +33,9 @@
 		    	<div class="container d-flex align-items-center mx-3 my-3">
 		    		<img src="/images/blue.jpeg" class="rounded-circle" style ="width:5rem" alt="...">
 		    		<a th:href="@{'/profile/' + ${experience.user.id}}" class="btn btn-outline-primary my-2 mx-5" th:text="|${experience.user.name} ${experience.user.surname}|"></a>		    	
+		    		<div class="col border mx-5 d-flex justify-content-end">
+		    			<a th:href="@{'/add/bookmark/' + ${experience.id}}" class="btn btn-primary">Bookmark</a>		    	
+		    		</div>
 		    	</div>	
 			
 				<div th:id=" 'carouselExampleControls' + ${experience.id}" class="carousel slide" data-ride="carousel">

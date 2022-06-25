@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -46,6 +45,9 @@ public class User {
 	
 	@OneToMany(mappedBy = "user")
 	private List<Experience> experiences;
+	
+	@OneToMany
+	private List<Experience> bookmarks;
 	
 	
 	public User() {
@@ -98,6 +100,15 @@ public class User {
 
 	public void setExperiences(List<Experience> experiences) {
 		this.experiences = experiences;
+	}
+	
+
+	public List<Experience> getBookmarks() {
+		return bookmarks;
+	}
+
+	public void setBookmarks(List<Experience> bookmarks) {
+		this.bookmarks = bookmarks;
 	}
 
 	@Override
