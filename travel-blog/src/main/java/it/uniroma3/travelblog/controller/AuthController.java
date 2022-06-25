@@ -1,11 +1,14 @@
 package it.uniroma3.travelblog.controller;
 
+import java.time.LocalDate;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -38,6 +41,7 @@ public class AuthController {
 
 	@Autowired 
 	private UserService userService;
+
 	
 	@GetMapping("/register")
 	public String showRegisterForm(Model model) {
@@ -58,15 +62,28 @@ public class AuthController {
 	
     @GetMapping("/default")
     public String defaultAfterLogin(Model model) {
-        
-//    	UserDetails userDetails = (UserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//    	Credentials credentials = credentialsService.findByUsername(userDetails.getUsername());
-//    	if (credentials.getRole().equals(Credentials.ADMIN_ROLE)) {
-//            return "admin/home";
-//        }
-//        return "index";
-    	return "index";
+    	return "redirect:/";
     }
+    
+    @GetMapping("/default/oauth")
+    public String defaultAfterLoginOauth(Model model) {
+        
+    	OAuth2User userDetails = (OAuth2User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    	System.out.println(userDetails.getAttributes().toString());
+    	String email = userDetails.getAttribute("email");
+    	User user = userService.findByEmail(email);
+    	if(user == null) {
+    		user = new User();
+    		user.setName((String)userDetails.getAttribute("given_name"));
+    		user.setSurname((String)userDetails.getAttribute("family_name"));
+    		user.setEmail(email);
+    		user.setBirthDate(LocalDate.now());
+    		userService.save(user);
+    	}
+    	return "redirect:/";
+    }
+    
+     
     
     @PostMapping("/registration/validate")
     public String registerUser(@ModelAttribute("user") User user, BindingResult userBindingResult, @ModelAttribute("credentials") Credentials credentials, BindingResult credentialsBindingResult, @RequestParam("file")MultipartFile file, Model model) {
@@ -91,9 +108,9 @@ public class AuthController {
 
     @GetMapping("/user/delete/{id}")
 	public String deleteUser(@PathVariable("id") Long id, Model model, HttpServletRequest request) {
-		Credentials credentials = this.credentialsService.findById(id);
+		Credentials credentials = credentialsService.findById(id);
 		FileStorer.dirEmptyEndDelete(credentials.getDirectoryName());
-		this.credentialsService.deleteById(id);
+		credentialsService.deleteById(id);
 		try {
 			request.logout();
 		} catch (ServletException e) {
@@ -104,29 +121,45 @@ public class AuthController {
     
 	@GetMapping("/user/delete/image/{id}")
 	public String deleteImage(@PathVariable("id") Long id, Model model) {
-		Credentials credentials = this.credentialsService.findById(id);
+		Credentials credentials = credentialsService.findById(id);
 		FileStorer.removeImgAndDir(credentials.getDirectoryName(), credentials.getUser().getImg());
 		credentials.getUser().setImg(null);			
-		this.credentialsService.update(credentials);
+		credentialsService.update(credentials);
 		
 		return this.modifyUser(model);
 	}
     
-	@GetMapping("/profile")
+    
+    @GetMapping("/admin/promote")
+    public String promoteUser() {
+    	return "/admin/promote";
+    }
+    
+    @PostMapping("/admin/promote/finalize")
+    public String promotion(@ModelAttribute("username") String username, BindingResult userBindingResult, Model model) {
+    	credentialsService.promote(username);
+    	return "admin/home";
+    }
+    
+    @GetMapping("/profile")
     public String getProfile(Model model) {
-    	
-    	Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-    	String username = ((UserDetails)principal).getUsername();
-    	
-    	Credentials credentials = this.credentialsService.findByUsername(username);
-    	
-    	model.addAttribute("user", credentials.getUser());
-    	return "/profile";
+      
+    	try {
+	    	Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+	    	String username = ((UserDetails)principal).getUsername();
+	    	Credentials credentials = this.credentialsService.findByUsername(username);
+			model.addAttribute("user", credentials.getUser());  
+    	} catch(Exception e) {
+        	OAuth2User userDetails = (OAuth2User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        	String email = userDetails.getAttribute("email");
+        	model.addAttribute("user",this.userService.findByEmail(email));   		
+    	}
+    	return "profile";
     }
 	
     @GetMapping("/profile/{id}")
     public String getProfile(@PathVariable("id") Long id, Model model) {
-		model.addAttribute("user", this.userService.findById(id));
+		model.addAttribute("user", userService.findById(id));
     	return "profile";
     }
     
@@ -147,6 +180,8 @@ public class AuthController {
         this.credentialsValidator.validate(credentials, bindingResult);
 		
     	if(!bindingResult.hasErrors()) {
+			FileStorer.dirRename(credentialsService.findById(credentials.getId()).getDirectoryName() , credentials.getDirectoryName());
+			
 			if(!file.isEmpty()) {
 				FileStorer.removeImgAndDir(credentials.getDirectoryName(), credentials.getUser().getImg());
 				credentials.getUser().setImg(FileStorer.store(file, credentials.getDirectoryName()));

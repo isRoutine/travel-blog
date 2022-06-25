@@ -74,11 +74,17 @@
 
 	<div class="container d-flex justify-content-center my-5">
   		<ul class="pagination">
-    		<li class="page-item">
-      			<a class="page-link">Previous</a>
+    		<li th:if="${currPage == 0}" class="page-item disabled">
+      			<a th:href="@{'/prev/' + ${currPage}}" class="page-link">Previous</a>
     		</li>
-    		<li class="page-item">
-      			<a class="page-link" href="#">Next</a>
+    		<li th:if="${currPage > 0}" class="page-item">
+      			<a th:href="@{'/prev/' + ${currPage}}" class="page-link">Previous</a>
+    		</li>
+    		<li th:if="${hasNext == false}" class="page-item disabled">
+      			<a th:href="@{'/next/' + ${currPage}}" class="page-link" href="#">Next</a>
+			</li>
+    		<li th:if="${hasNext == true}" class="page-item">
+      			<a th:href="@{'/next/' + ${currPage}}" class="page-link" href="#">Next</a>
 			</li>
   		</ul>	
 	</div>	
