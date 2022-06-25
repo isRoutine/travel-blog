@@ -37,3 +37,12 @@ body{
 .profile-name{
 	font-size: 1.5rem;
 }
+
+.bm-icon{
+	font-size: 2rem;
+	color: #6c757d;
+}
+
+.bm-link :hover{
+	color: #007bff;
+}
