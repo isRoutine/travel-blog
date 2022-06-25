@@ -1,75 +1,22 @@
-* {
-	margin: 0;
-	padding: 0;
-	box-sizing: border-box;
+.main-row{
+	height: 20vw;
+ 	background-size: cover;
+  	background-position: center;
+  	background-repeat: no-repeat;
+  	background-image: linear-gradient(rgba(100, 100, 100, 0.4), rgba(100, 100, 100, 0.4)), url("/images/default/profileBg.jpg");
+  	display: flex;
 }
 
-body {
-	font-family: Arial, Helvetica, sans-serif;
+.title-frame{
 	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-	min-height: 100vh;
-	line-height: 1.4;
 }
 
-.container {
-	margin-top: 40px;
-	background-repeat: no-repeat;
-	background-position: center;
-	background-size: cover;
-	width: 100%;
-	height: auto;
-	position: relative;
-	box-shadow: 0 0 50px rgba(0, 0, 0, 0.315);
-}
-.container .container__info {
-	position: absolute;
-	right: 0;
-	left: 0;
-	bottom: 20%;
-	display: flex;
-	align-items: flex-end;
-	padding: 15px 30px;
-	color: #fff;
-}
-.container .container__info span {
-	margin-right: 20px;
-}
-.container .container__info i {
-	margin-right: 10px;
-}
-.container .container__profile {
-	background-color: #e4f2fd;
-	display: flex;
-	align-items: center;
-	padding: 20px;
-	position: absolute;
-	right: 0;
-	left: 0;
-	bottom: 0;
-}
-.container .container__profile img {
-	width: 60px;
-	height: 60px;
-	border-radius: 50%;
-	object-position: center;
-	object-fit: cover;
-	margin-right: 10px;
-}
-.container .container__profile h2 {
-	color: #334454;
-	font-size: 1.2rem;
-}
-.container .container__profile p {
-	color: #a1b2bc;
-	font-size: 0.8rem;
-}
-.container .container__profile p b {
-	font-style: italic;
-}
+.title{	
+	font-size: 4.5rem;
+/* 	font-weight: bold; */
+	color: white;
 
-.carousel{
-	padding: 10px 0px 110px;
+	text-align: center;
+	border-bottom: 3px solid #fff;
+	
 }
