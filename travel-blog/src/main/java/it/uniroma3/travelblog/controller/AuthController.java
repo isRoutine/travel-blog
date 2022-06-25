@@ -64,7 +64,7 @@ public class AuthController {
 //            return "admin/home";
 //        }
 //        return "index";
-    	return "index";
+    	return "redirect:/";
     }
     
     @PostMapping("/registration/validate")

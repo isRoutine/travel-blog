@@ -32,7 +32,7 @@ import it.uniroma3.travelblog.service.UserService;
 @RequestMapping("/experience")
 public class ExperienceController {
 	
-	private static final int EXP_FOR_PAGE = 5;
+
 
 	@Autowired
 	private ExperienceService expService;
@@ -43,17 +43,6 @@ public class ExperienceController {
 	@Autowired
 	private CredentialsService credentialsService;	
 	
-	
-	private List<Experience> getSortedExperiences() {
-		List<Experience> experieces = this.expService.findAll();
-		experieces.sort(new Comparator<Experience>() {
-			@Override
-			public int compare(Experience o1, Experience o2) {
-				return o1.getCreationTime().compareTo(o2.getCreationTime());
-			}
-		});
-		return experieces;
-	}
 		
 	@GetMapping("/{id}")
 	public String getExperience(@PathVariable("id") Long id, Model model) {
@@ -188,41 +177,5 @@ public class ExperienceController {
 	}
 	
 	
-	/**Primo metodo da invocare per ottenere la home page**/
-	@GetMapping("/")
-	public String getExperiencesHome(Model model) {
-		List<Experience> experieces = this.expService.findAll();
-		experieces.sort(new Comparator<Experience>() {
-			@Override
-			public int compare(Experience o1, Experience o2) {
-				return o1.getCreationTime().compareTo(o2.getCreationTime());
-			}
-		});
-		
-		model.addAttribute("currPage", 0);
-		model.addAttribute("experiences", experieces.subList(0, EXP_FOR_PAGE));
-		return "index";
-	}
-	
-	/**Metodo da invocare per ottenere il caricamento delle esperienze della pagina successiva**/
-	@GetMapping("/next/{page}")
-	public String getNextExperiences(@PathVariable("page") Integer page, Model model) {
-		List<Experience> experieces = getSortedExperiences();
-		Integer currPage = page+1;
-		model.addAttribute("currPage", currPage);
-		model.addAttribute("experiences", experieces.subList(currPage*EXP_FOR_PAGE, (currPage*EXP_FOR_PAGE)+EXP_FOR_PAGE));
-		return "index"; // ritornriamo sempre l'index ...
-	}
-	
-	/**Metodo da invocare per ottenere il caricamento delle esperienze della pagina precedente**/
-	@GetMapping("/prev/{page}")
-	public String getPrevExperiences(@PathVariable("page") Integer page, Model model) {
-		List<Experience> experieces = getSortedExperiences();
-		Integer currPage = page-1;
-		model.addAttribute("currPage", currPage);
-		model.addAttribute("experiences", experieces.subList(currPage*EXP_FOR_PAGE, (currPage*EXP_FOR_PAGE)+EXP_FOR_PAGE));
-		return "index";
-	}
-
 	
 }
