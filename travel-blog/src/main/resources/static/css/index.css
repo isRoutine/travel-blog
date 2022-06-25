@@ -1,3 +1,8 @@
+body{
+	font-family: 'Roboto', sans-serif;
+	font-family: 'Tinos', serif;
+}
+
 .main-row{
 	height: 30vw;
  	background-size: cover;
