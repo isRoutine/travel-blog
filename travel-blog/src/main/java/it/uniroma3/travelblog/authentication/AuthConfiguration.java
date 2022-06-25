@@ -40,9 +40,12 @@ public class AuthConfiguration extends WebSecurityConfigurerAdapter {
                 .and().formLogin()
                 .loginPage("/login")
                 .defaultSuccessUrl("/default")
-                /**TODO inserire oauth login **/
                 
-                /** logout **/
+                /**oauth login **/
+                .and().oauth2Login()
+                .loginPage("/login")
+                .defaultSuccessUrl("/default/oauth")
+                
                 /** logout **/
                 .and().logout()
     			//il logout è attivato con una richiesta GET a "/logout"
