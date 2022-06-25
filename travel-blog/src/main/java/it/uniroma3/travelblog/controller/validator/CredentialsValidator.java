@@ -1,4 +1,4 @@
-package it.uniroma3.travelblog.validator;
+package it.uniroma3.travelblog.controller.validator;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -28,12 +28,17 @@ public class CredentialsValidator implements Validator {
         String password = credentials.getPassword().trim();
 
         if (username.length() < MIN_USERNAME_LENGTH || username.length() > MAX_USERNAME_LENGTH)
-            errors.reject("username.size");
-        else if (this.credentialsService.findByUsername(username) != null)
-            errors.reject("username.duplicate");
+        	errors.rejectValue("username", "username.size");
+        
 
         if (password.length() < MIN_PASSWORD_LENGTH || password.length() > MAX_PASSWORD_LENGTH)
-            errors.reject("password.size");
+        	errors.rejectValue("password", "password.size");
+        
+        if (credentials.getId() == null || !credentials.getUsername().equals(this.credentialsService.findById(credentials.getId()).getUsername())) {
+        	if (this.credentialsService.findByUsername(username) != null)
+        		errors.rejectValue("username", "username.duplication");
+        }
+        
     }
 
     @Override

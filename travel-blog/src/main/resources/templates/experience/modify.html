@@ -35,10 +35,12 @@
 				  <div class="mb-3">
 				    <label class="form-label">Nome</label>
 				    <input th:field="${experience.name}" type="text"   class="form-control">
+				    <div class="alert alert-danger mt-2" role="alert" th:if="${#fields.hasErrors('experience.name')}" th:errors="${experience.name}"></div>
 				  </div>
 				  <div class="mb-3">
 				    <label class="form-label">Descrizione</label>
 				    <input th:field="${experience.description}" type="text"  class="form-control">
+				    <div class="alert alert-danger mt-2" role="alert" th:if="${#fields.hasErrors('experience.description')}" th:errors="${experience.description}"></div>
 				  </div>
 				  <div class="mb-3">
 				    <label class="form-label">Nazione</label>

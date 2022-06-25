@@ -1,4 +1,4 @@
-package it.uniroma3.travelblog.validator;
+package it.uniroma3.travelblog.controller.validator;
 
 import java.util.regex.Pattern;
 
@@ -13,7 +13,7 @@ import it.uniroma3.travelblog.service.UserService;
 @Component
 public class UserValidator implements Validator {
 	
-	final Integer MAX_NAME_LENGTH = 100;
+	final Integer MAX_NAME_LENGTH = 50;
     final Integer MIN_NAME_LENGTH = 2;
 	
     @Autowired
@@ -27,16 +27,16 @@ public class UserValidator implements Validator {
         String email = user.getEmail().trim();
 
         if (name.length() < MIN_NAME_LENGTH || name.length() > MAX_NAME_LENGTH)
-            errors.reject("nome.size");
+        	errors.rejectValue("name", "size");
 
         if (surname.length() < MIN_NAME_LENGTH || surname.length() > MAX_NAME_LENGTH)
-            errors.reject("cognome.size");
+        	errors.rejectValue("surname", "size");
         
         if (!isEmailValid(email))
-            errors.reject("email.invalid");
-            
-        else if (this.userService.findByEmail(email) != null)
-            errors.reject("email.duplicate");
+        	errors.rejectValue("email", "email.invalid");
+        if(user.getId() == null || !user.getEmail().equals(this.userService.findById(user.getId()).getEmail())) {   
+        	if (this.userService.findByEmail(email) != null) errors.rejectValue("email", "email.duplication");
+        }
     }
 
     @Override

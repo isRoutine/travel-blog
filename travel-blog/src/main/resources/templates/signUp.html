@@ -16,45 +16,41 @@
 	<div class="page container-fluid">
   		  <div class="form shadow-lg p-3 mb-5 bg-light">
 	        	<form class="" th:action = "@{/registration/validate}" method="post"  enctype="multipart/form-data">
-	                  <div th:if="${#fields.hasGlobalErrors()}">
-	                    <p th:each="err : ${#fields.globalErrors()}" th:text="${err}">...</p>
-	                  </div>
 					  <h1 class="form-text text-muted mb-3"><b>Registrati</b></h1>
 					
 	                  <div class="form-group">
 	                  	<label class="form-label" for="form3Example1c">Nome</label>
 	                    <input type="text" th:field="${user.name}" class="form-control" required />
-	                    <span th:if="${#fields.hasErrors('user.name')}" th:errors="${user.name}"> </span>
+	                    <div class="alert alert-danger mt-2" role="alert" th:if="${#fields.hasErrors('user.name')}" th:errors="${user.name}"></div>
 	                  </div>
 	
 	                  <div class="form-group">
 	                  	<label class="form-label" for="form3Example1c">Cognome</label>
 	                    <input type="text" th:field="${user.surname}" class="form-control" required />
-	                    <span th:if="${#fields.hasErrors('user.surname')}" th:errors="${user.surname}"> </span>
+	                    <div class="alert alert-danger mt-2" role="alert" th:if="${#fields.hasErrors('user.surname')}" th:errors="${user.surname}"></div>
 	                  </div>
 	
 	                  <div class="form-group">
 	                  	<label class="form-label" for="form3Example1c">Username</label>
 	                    <input type="text" th:field="${credentials.username}" class="form-control" required />
-	                    <span th:if="${#fields.hasErrors('credentials.username')}" th:errors="${credentials.username}"> </span>
+	                    <div class="alert alert-danger mt-2" role="alert" th:if="${#fields.hasErrors('credentials.username')}" th:errors="${credentials.username}"></div>
 	                  </div>
 	
 	                  <div class="form-group">
 	                  	<label class="form-label" for="form3Example1c">Data di nascita</label>
 	                    <input type="date" th:field="${user.birthDate}" class="form-control" required />
-	                    <span th:if="${#fields.hasErrors('user.birthDate')}" th:errors="${user.birthDate}"> </span>
 	                  </div>
 	
 	                  <div class="form-group">
 	                  	<label class="form-label" for="form3Example1c">Email</label>
 	                    <input type="text" th:field="${user.email}" class="form-control" required />
-	                    <span th:if="${#fields.hasErrors('user.email')}" th:errors="${user.email}"> </span>
+	                    <div class="alert alert-danger mt-2" role="alert" th:if="${#fields.hasErrors('user.email')}" th:errors="${user.email}"></div>
 	                  </div>
 	
 	                  <div class="form-group">
 	                  	<label class="form-label" for="form3Example4c">Password</label>
 	                    <input type="password" th:field="${credentials.password}" class="form-control" required />
-	                    <span th:if="${#fields.hasErrors('credentials.password')}" th:errors="${credentials.password}"> </span>
+	                    <div class="alert alert-danger mt-2" role="alert" th:if="${#fields.hasErrors('credentials.password')}" th:errors="${credentials.password}"></div>
 	                  </div>
 	                  
 	                  <div class="form-row d-flex justify-content-start m-4">

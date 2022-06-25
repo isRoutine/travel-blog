@@ -16,13 +16,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import it.uniroma3.travelblog.controller.validator.CredentialsValidator;
+import it.uniroma3.travelblog.controller.validator.UserValidator;
 import it.uniroma3.travelblog.model.Credentials;
 import it.uniroma3.travelblog.model.User;
 import it.uniroma3.travelblog.presentation.FileStorer;
 import it.uniroma3.travelblog.service.CredentialsService;
 import it.uniroma3.travelblog.service.UserService;
-import it.uniroma3.travelblog.validator.CredentialsValidator;
-import it.uniroma3.travelblog.validator.UserValidator;
 
 @Controller
 public class AuthController {

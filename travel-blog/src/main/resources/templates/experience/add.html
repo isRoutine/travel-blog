@@ -19,25 +19,30 @@
   			<div class="form shadow-lg p-3 mb-5 bg-light">
 					<form th:action="@{/experience/add}" method="post" enctype="multipart/form-data" class="m-3">		  
 					  <h1 class="form-text text-muted mb-3"><b>Raccontaci la tua esperienza</b></h1>
+					  <div th:if="${#fields.hasGlobalErrors()}">
+	                    <p th:each="err : ${#fields.globalErrors()}" th:text="${err}">...</p>
+	                  </div>
 					  <div class="mb-3">
 					    <label class="form-label">Nome</label>
-					    <input th:field="${experience.name}" type="text"   class="form-control">
+					    <input th:field="${experience.name}" type="text"   class="form-control" required>
+					    <div class="alert alert-danger mt-2" role="alert" th:if="${#fields.hasErrors('experience.name')}" th:errors="${experience.name}"></div>
 					  </div>
 					  <div class="mb-3">
 					    <label class="form-label">Descrizione</label>
-					    <input th:field="${experience.description}" type="text"  class="form-control">
+					    <input th:field="${experience.description}" type="text"  class="form-control" required>
+					    <div class="alert alert-danger mt-2" role="alert" th:if="${#fields.hasErrors('experience.description')}" th:errors="${experience.description}"></div>
 					  </div>
 					  <div class="mb-3">
 					    <label class="form-label">Nazione</label>
-					    <input th:field="${location.country}" type="text"  class="form-control">
+					    <input th:field="${location.country}" type="text"  class="form-control" required>
 					  </div>
 					  <div class="mb-3">
 					    <label class="form-label">Città</label>
-					    <input th:field="${location.city}" type="text"  class="form-control">
+					    <input th:field="${location.city}" type="text"  class="form-control" required>
 					  </div>
 					  <div class="mb-3">
 					    <label class="form-label">Foto</label>
-					    <input type="file" name="file" class="form-control-file" multiple>
+					    <input type="file" name="file" class="form-control-file" multiple required>
 					  </div>
 					  <button type="submit" class="btn btn-primary">Aggiungi Esperienza</button>
 					</form>				
