@@ -58,6 +58,9 @@
 			<hr class="featurette-divider">
 			
 			<!-- Experience Info -->
+			<div class="row d-flex justify-content-end mx-5">
+				<a th:href="@{'/all/bookmark/' + ${user.id}}" class="btn btn-primary">Bookmark</a>				
+			</div>
 
 			<div th:if="${me == user.id}" class="row bg-light">
 				<h1 class="col p-4 text-center text-secondary" th:text="|Le tue esperienze ${user.name}|">Le Esperienze</h2>
@@ -69,7 +72,7 @@
 			
 			<!-- Card Frame --> 
 			<div class="row d-flex justify-content-center">
-					<div class="col-md-auto d-flex justify-content-center" th:each="experience : ${user.experiences}">
+					<div class="col-md-auto d-flex justify-content-center" th:each="experience : ${experiences}">
 						<div class="card mb-4 shadow">
 							<img th:if="${experience.imgs[0] == null}" class="card-img-top exp-img" src="/images/mountain.png">
 		  					<img th:if="${experience.imgs[0] != null}" th:src="@{'/images/' + ${experience.getDirectoryName()} +'/'+ ${experience.imgs[0]}}" class="card-img-top exp-img" alt="...">

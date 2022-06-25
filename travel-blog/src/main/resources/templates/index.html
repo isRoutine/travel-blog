@@ -45,6 +45,9 @@
 		    		<img th:if="${experience.user.img == null}"  src="/images/default/profile.png" class="rounded-circle" style ="width:5rem" alt="...">
 		    		<a th:href="@{'/profile/' + ${experience.user.id}}" class="text-muted profile-name m-3 flex-grow-1" th:text="|${experience.user.name} ${experience.user.surname}|"></a>		    	
 		    		<p th:text="${experience.creationTime.toString().substring(0,10)}" class="card-text text-muted font-weight-bold align-self-start mr-1">Data</p>
+		    		<div class="col border mx-5 d-flex justify-content-end">
+		    			<a th:href="@{'/add/bookmark/' + ${experience.id}}" class="btn btn-primary">Bookmark</a>		    	
+		    		</div>
 		    	</div>	
 			
 				<div th:id=" 'carouselExampleControls' + ${experience.id}" class="carousel slide" data-ride="carousel">
