@@ -25,6 +25,7 @@ import it.uniroma3.travelblog.model.Experience;
 import it.uniroma3.travelblog.model.Location;
 import it.uniroma3.travelblog.model.User;
 import it.uniroma3.travelblog.presentation.FileStorer;
+import it.uniroma3.travelblog.service.BookmarkService;
 import it.uniroma3.travelblog.service.CredentialsService;
 import it.uniroma3.travelblog.service.ExperienceService;
 import it.uniroma3.travelblog.service.UserService;
@@ -44,6 +45,9 @@ public class ExperienceController {
 	
 	@Autowired
 	private CredentialsService credentialsService;	
+	
+	@Autowired
+	private BookmarkService bookmarkService;
 	
 		
 	@GetMapping("/{id}")
@@ -140,6 +144,9 @@ public class ExperienceController {
 	public String deleteExperience(@PathVariable("id") Long id, Model model) {
 		Experience exp = this.expService.findById(id);
 		FileStorer.removeImgsAndDir(exp.getDirectoryName(), exp.getImgs());
+		
+		this.bookmarkService.deleteAllByTarget(exp);
+		
 		this.expService.deleteById(id);
 		return "redirect:/profile";
 	}
