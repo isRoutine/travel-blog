@@ -40,9 +40,12 @@ public class Experience{
 	@ManyToOne
 	private User user;
 	
+	private Integer likes;
+	
 	
 	public Experience() {
 		this.imgs = new String[MAX_IMGS];
+		this.likes = 0;
 	}
 
 	public Long getId() {
@@ -59,6 +62,22 @@ public class Experience{
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public Integer getLikes() {
+		return likes;
+	}
+
+	public void setLikes(Integer likes) {
+		this.likes = likes;
+	}
+	
+	public void addLike() {
+		this.likes += 1;
+	}
+	
+	public void removeLike() {
+		this.likes -= 1;
 	}
 
 	public LocalDateTime getCreationTime() {

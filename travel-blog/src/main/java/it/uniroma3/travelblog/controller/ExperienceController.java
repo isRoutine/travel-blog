@@ -28,6 +28,7 @@ import it.uniroma3.travelblog.presentation.FileStorer;
 import it.uniroma3.travelblog.service.BookmarkService;
 import it.uniroma3.travelblog.service.CredentialsService;
 import it.uniroma3.travelblog.service.ExperienceService;
+import it.uniroma3.travelblog.service.LikeService;
 import it.uniroma3.travelblog.service.UserService;
 
 @Controller
@@ -48,6 +49,9 @@ public class ExperienceController {
 	
 	@Autowired
 	private BookmarkService bookmarkService;
+	
+	@Autowired
+	private LikeService likeService;
 	
 		
 	@GetMapping("/{id}")
@@ -146,6 +150,7 @@ public class ExperienceController {
 		FileStorer.removeImgsAndDir(exp.getDirectoryName(), exp.getImgs());
 		
 		this.bookmarkService.deleteAllByTarget(exp);
+		this.likeService.deleteAllByTarget(exp);
 		
 		this.expService.deleteById(id);
 		return "redirect:/profile";

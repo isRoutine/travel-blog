@@ -77,7 +77,18 @@
 		   			
 		  	<div class="card-body">
 		  		<span class="badge badge-secondary card-text float-right p-2" th:text="|${experience.location.country} - ${experience.location.city}|"></span>	
-		    	<h3 th:text="${experience.name}"class="card-title">Card title</h3>
+		    	<div class="d-flex">
+		    		<h3 th:text="${experience.name}"class="card-title">Card title</h3>
+		    		
+			    	<a sec:authorize="isAuthenticated()" th:if="${!likes.contains(experience)}" th:href="@{'/like/add/' + ${experience.id}}" class="lk-link ml-2"><span class="material-icons lk-icon">favorite_border</span></a>
+			    	<a sec:authorize="isAuthenticated()" th:if="${likes.contains(experience)}" th:href="@{'/like/delete/byExp/' + ${experience.id}}" class="lk-rm-link ml-2"><span class="material-icons lk-rm-icon">favorite</span></a>
+		 	   	</div>
+		    	
+		    	
+				<div class="btn btn-sm btn-primary float-right">
+  					Like <span class="badge badge-light" th:text="${experience.likes}">4</span>
+				</div>
+				
 		    	<p th:text="${experience.description}" class="card-text">Descrizione</p>
 		  	</div>
 		</div>
