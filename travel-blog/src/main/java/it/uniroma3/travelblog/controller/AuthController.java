@@ -108,15 +108,24 @@ public class AuthController {
 
     @GetMapping("/user/delete/{id}")
 	public String deleteUser(@PathVariable("id") Long id, Model model, HttpServletRequest request) {
-		Credentials credentials = credentialsService.findById(id);
-		FileStorer.dirEmptyEndDelete(credentials.getDirectoryName());
-		credentialsService.deleteById(id);
+		User user = this.userService.findById(id);
+		Credentials credentials = this.credentialsService.findByUser(user);
+		
+		try { // evito il caso in cui non sia stata creata la directory per questo user
+			// nel caso in cui non avesse ancora inserito esperienze
+			FileStorer.dirEmptyEndDelete(user.getDirectoryName());
+		} catch(Exception e) {
+			
+		}
+		
+		
 		try {
 			request.logout();
 		} catch (ServletException e) {
 			e.printStackTrace();
 		}
-		return "index";
+		credentialsService.deleteById(credentials.getId());
+		return "redirect:/";
 	}
     
 	@GetMapping("/user/delete/image/{id}")
@@ -130,16 +139,16 @@ public class AuthController {
 	}
     
     
-    @GetMapping("/admin/promote")
-    public String promoteUser() {
-    	return "/admin/promote";
-    }
-    
-    @PostMapping("/admin/promote/finalize")
-    public String promotion(@ModelAttribute("username") String username, BindingResult userBindingResult, Model model) {
-    	credentialsService.promote(username);
-    	return "admin/home";
-    }
+//    @GetMapping("/admin/promote")
+//    public String promoteUser() {
+//    	return "/admin/promote";
+//    }
+//    
+//    @PostMapping("/admin/promote/finalize")
+//    public String promotion(@ModelAttribute("username") String username, BindingResult userBindingResult, Model model) {
+//    	credentialsService.promote(username);
+//    	return "admin/home";
+//    }
     
     @GetMapping("/profile")
     public String getProfile(Model model) {
@@ -194,22 +203,22 @@ public class AuthController {
     }
     
     @PostMapping("/user/modify")
-	public String updateProfile(@ModelAttribute("credentials") Credentials credentials, BindingResult bindingResult,@RequestParam("file")MultipartFile file, Model model) {
-    	this.userValidator.validate(credentials.getUser(), bindingResult);
-        this.credentialsValidator.validate(credentials, bindingResult);
-		
-    	if(!bindingResult.hasErrors()) {
-			FileStorer.dirRename(credentialsService.findById(credentials.getId()).getDirectoryName() , credentials.getDirectoryName());
+	public String updateProfile(@ModelAttribute("credentials") Credentials credentials, BindingResult credentialsBindingResult,
+				BindingResult userBindingResult,@RequestParam("file")MultipartFile file, Model model) {
+//    	this.userValidator.validate(credentials.getUser(), userBindingResult);
+//        this.credentialsValidator.validate(credentials, credentialsBindingResult);
+//		
+//    	if(!userBindingResult.hasErrors() && !credentialsBindingResult.hasErrors()) {
 			
 			if(!file.isEmpty()) {
-				FileStorer.removeImgAndDir(credentials.getDirectoryName(), credentials.getUser().getImg());
-				credentials.getUser().setImg(FileStorer.store(file, credentials.getDirectoryName()));
+				FileStorer.removeImg(credentials.getUser().getDirectoryName(), credentials.getUser().getImg());
+				credentials.getUser().setImg(FileStorer.store(file, credentials.getUser().getDirectoryName()));
 			}
 			
 			credentialsService.update(credentials);
 			
-			return "index";
-		}
-		else return "/profile";
+			return "redirect:/profile";
+//		}
+//		else return "redirect:/user/modify";
 	}
 }

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import it.uniroma3.travelblog.model.Bookmark;
+import it.uniroma3.travelblog.model.Experience;
 import it.uniroma3.travelblog.model.User;
 import it.uniroma3.travelblog.repository.BookmarkRepository;
 
@@ -29,12 +30,19 @@ public class BookmarkService {
         return this.bookmarkRepository.save(bookmark);
     }
 
+    @Transactional
 	public void deleteById(Long id) {
 		this.bookmarkRepository.deleteById(id);
 	}
 	
 	public List<Bookmark> findAllByUser(User user){
 		return this.bookmarkRepository.findAllByOwner(user);
+	}
+
+	@Transactional
+	public void deleteAllByTarget(Experience exp) {
+		this.bookmarkRepository.deleteAllByTarget(exp);
+		
 	}
 	
 }

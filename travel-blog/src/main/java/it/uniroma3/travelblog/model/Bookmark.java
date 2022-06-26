@@ -1,6 +1,5 @@
 package it.uniroma3.travelblog.model;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -14,10 +13,10 @@ public class Bookmark {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	
-	@ManyToOne(cascade = CascadeType.MERGE)
+	@ManyToOne
 	private User owner;
 	
-	@ManyToOne(cascade = CascadeType.MERGE)
+	@ManyToOne
 	private Experience target;
 
 	public User getOwner() {

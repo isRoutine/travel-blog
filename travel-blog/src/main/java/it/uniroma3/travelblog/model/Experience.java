@@ -1,8 +1,6 @@
 package it.uniroma3.travelblog.model;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 import javax.persistence.CascadeType;
@@ -12,7 +10,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.validation.constraints.NotBlank;
 
 @Entity
@@ -43,12 +40,9 @@ public class Experience{
 	@ManyToOne
 	private User user;
 	
-	@OneToMany(mappedBy = "target", cascade = CascadeType.REMOVE)
-	private List<Bookmark> booked;
 	
 	public Experience() {
 		this.imgs = new String[MAX_IMGS];
-		this.booked = new ArrayList<Bookmark>();
 	}
 
 	public Long getId() {
@@ -108,13 +102,6 @@ public class Experience{
 		this.name = name;
 	}
 	
-	public List<Bookmark> getBooked() {
-		return booked;
-	}
-
-	public void setBooked(List<Bookmark> booked) {
-		this.booked = booked;
-	}
 
 	public void emptyImgs() {
 		this.imgs = new String[MAX_IMGS];
