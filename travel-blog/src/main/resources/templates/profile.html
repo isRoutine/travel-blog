@@ -59,7 +59,7 @@
 			
 			<!-- Experience Info -->
 			<div class="row d-flex justify-content-end mx-5">
-				<a th:href="@{'/all/bookmark/' + ${user.id}}" class="btn btn-primary">Bookmark</a>				
+				<a th:if="${me == user.id}" th:href="@{'/all/bookmark/' + ${user.id}}" class="btn btn-primary">Bookmark</a>				
 			</div>
 
 			<div th:if="${me == user.id}" class="row bg-light">
