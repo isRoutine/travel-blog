@@ -42,7 +42,7 @@
 			        </div>
 			        <div class="col p-4 d-flex flex-column position-static">
 			          <strong class="d-inline-block mb-2 text-primary">Profile</strong>
-			          <h3 class="mb-0" th:text="|${user.name} ${user.surname} - ${user.id}|">Nome Cognome - id</h3>
+			          <h3 class="mb-0" th:text="|${user.name} ${user.surname}|">Nome Cognome</h3>
 			          <div class="mb-1 text-muted" th:text="${user.email}">travelblog@email.com</div>
 			          <div class="mb-1 text-muted" th:text="${user.birthDate}">01/01/01</div>
 			          <div th:if="${me == user.id}" class="mt-3" role="group">
@@ -83,7 +83,7 @@
 				    			<h5 class="card-text text-muted" th:text="${experience.creationTime.toString().substring(0,10)}">Data esperienza</h5>
 		    					<div th:if="${me == user.id}" >
     								<a th:href="@{'/experience/delete/' + ${experience.id}}" class="btn btn-sm btn-outline-danger">Elimina</a>
-				                  	<a th:href="@{'/experience/modify/' + ${experience.id}}" class="btn btn-sm btn-outline-secondary">Modifica</a>
+				                  	<a  sec:authorize="!hasRole('USER')" th:href="@{'/experience/modify/' + ${experience.id}}" class="btn btn-sm btn-outline-secondary">Modifica</a>
 				                </div>
 		  					</div>
 						</div>	

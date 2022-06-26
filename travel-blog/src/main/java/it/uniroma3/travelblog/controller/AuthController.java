@@ -57,7 +57,7 @@ public class AuthController {
 	
 	@GetMapping("/logout")
 	public String logout(Model model) {
-		return "index";
+		return "redirect:/";
 	}
 	
     @GetMapping("/default")
@@ -100,7 +100,7 @@ public class AuthController {
             	userService.save(user);
             }
             
-            return "registrationSuccessful";
+            return "redirect:/login";
         }
         return "signUp";
     }
@@ -130,10 +130,10 @@ public class AuthController {
     
 	@GetMapping("/user/delete/image/{id}")
 	public String deleteImage(@PathVariable("id") Long id, Model model) {
-		Credentials credentials = credentialsService.findById(id);
-		FileStorer.removeImgAndDir(credentials.getDirectoryName(), credentials.getUser().getImg());
-		credentials.getUser().setImg(null);			
-		credentialsService.update(credentials);
+		User user = this.userService.findById(id);
+		FileStorer.removeImg(user.getDirectoryName(), user.getImg());
+		user.setImg(null);			
+		this.userService.save(user);
 		
 		return this.modifyUser(model);
 	}
@@ -198,27 +198,26 @@ public class AuthController {
     	String username = ((UserDetails)principal).getUsername();
     	Credentials credentials = this.credentialsService.findByUsername(username);
     	
-		model.addAttribute("credentials", credentials);
+		model.addAttribute("user", credentials.getUser());
     	return "/user/modify";
     }
     
     @PostMapping("/user/modify")
-	public String updateProfile(@ModelAttribute("credentials") Credentials credentials, BindingResult credentialsBindingResult,
-				BindingResult userBindingResult,@RequestParam("file")MultipartFile file, Model model) {
-//    	this.userValidator.validate(credentials.getUser(), userBindingResult);
-//        this.credentialsValidator.validate(credentials, credentialsBindingResult);
-//		
-//    	if(!userBindingResult.hasErrors() && !credentialsBindingResult.hasErrors()) {
+	public String updateProfile(@ModelAttribute("user") User user, BindingResult bindingResult,@RequestParam("file")MultipartFile file, Model model) {
+    	this.userValidator.validate(user, bindingResult);
+
+		
+    	if(!bindingResult.hasErrors()) {
 			
 			if(!file.isEmpty()) {
-				FileStorer.removeImg(credentials.getUser().getDirectoryName(), credentials.getUser().getImg());
-				credentials.getUser().setImg(FileStorer.store(file, credentials.getUser().getDirectoryName()));
+				FileStorer.removeImg(user.getDirectoryName(),user.getImg());
+				user.setImg(FileStorer.store(file, user.getDirectoryName()));
 			}
 			
-			credentialsService.update(credentials);
+			this.userService.save(user);
 			
 			return "redirect:/profile";
-//		}
-//		else return "redirect:/user/modify";
+		}
+		else return "redirect:/user/modify";
 	}
 }

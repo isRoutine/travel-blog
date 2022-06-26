@@ -26,17 +26,23 @@ public class UserValidator implements Validator {
         String surname = user.getSurname().trim();
         String email = user.getEmail().trim();
 
+
         if (name.length() < MIN_NAME_LENGTH || name.length() > MAX_NAME_LENGTH)
-        	errors.rejectValue("name", "size");
+            errors.rejectValue("name", "size");
 
         if (surname.length() < MIN_NAME_LENGTH || surname.length() > MAX_NAME_LENGTH)
-        	errors.rejectValue("surname", "size");
-        
-        if (!isEmailValid(email))
-        	errors.rejectValue("email", "email.invalid");
-        if(user.getId() == null || !user.getEmail().equals(this.userService.findById(user.getId()).getEmail())) {   
-        	if (this.userService.findByEmail(email) != null) errors.rejectValue("email", "email.duplication");
+            errors.rejectValue("surname", "size");
+
+        if (!isEmailValid(email)) {
+            errors.rejectValue("email", "email.invalid");
         }
+        System.out.println("------->" + user.getId());
+        
+        if(user.getId() == null || !user.getEmail().equals(this.userService.findById(user.getId()).getEmail())) {
+            if (this.userService.findByEmail(email) != null)
+                errors.rejectValue("email", "email.duplication");
+        }
+
     }
 
     @Override
