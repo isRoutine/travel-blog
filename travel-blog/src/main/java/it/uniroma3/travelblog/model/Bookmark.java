@@ -19,6 +19,14 @@ public class Bookmark {
 	@ManyToOne
 	private Experience target;
 
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
 	public User getOwner() {
 		return owner;
 	}

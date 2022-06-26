@@ -24,6 +24,7 @@ import it.uniroma3.travelblog.controller.validator.UserValidator;
 import it.uniroma3.travelblog.model.Credentials;
 import it.uniroma3.travelblog.model.User;
 import it.uniroma3.travelblog.presentation.FileStorer;
+import it.uniroma3.travelblog.service.BookmarkService;
 import it.uniroma3.travelblog.service.CredentialsService;
 import it.uniroma3.travelblog.service.UserService;
 
@@ -41,6 +42,9 @@ public class AuthController {
 
 	@Autowired 
 	private UserService userService;
+	
+	@Autowired
+	private BookmarkService bookmarkService;
 
 	
 	@GetMapping("/register")
@@ -111,6 +115,8 @@ public class AuthController {
 		User user = this.userService.findById(id);
 		Credentials credentials = this.credentialsService.findByUser(user);
 		
+		this.bookmarkService.deleteAllByOwner(user);
+		
 		try { // evito il caso in cui non sia stata creata la directory per questo user
 			// nel caso in cui non avesse ancora inserito esperienze
 			FileStorer.dirEmptyEndDelete(user.getDirectoryName());
@@ -167,7 +173,7 @@ public class AuthController {
         	model.addAttribute("me", this.userService.findByEmail(email).getId());   
         	model.addAttribute("experiences", this.userService.findByEmail(email).getExperiences());
     	}
-    	return "profile";
+    	return "/user/profile";
     }
 	
     @GetMapping("/profile/{id}")
@@ -188,7 +194,7 @@ public class AuthController {
     	}
 		
 		
-    	return "profile";
+    	return "/user/profile";
     }
     
     @GetMapping("/user/modify")

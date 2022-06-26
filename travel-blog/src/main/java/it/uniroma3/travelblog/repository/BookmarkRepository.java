@@ -12,4 +12,8 @@ public interface BookmarkRepository extends CrudRepository<Bookmark, Long> {
 	public List<Bookmark> findAllByOwner(User owner);
 
 	public void deleteAllByTarget(Experience target);
+
+	public void deleteAllByOwner(User owner);
+
+	public void deleteByTargetAndOwner(Experience target, User owner);
 }

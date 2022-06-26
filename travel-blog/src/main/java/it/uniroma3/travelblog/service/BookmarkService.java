@@ -44,5 +44,16 @@ public class BookmarkService {
 		this.bookmarkRepository.deleteAllByTarget(exp);
 		
 	}
+
+	@Transactional
+	public void deleteAllByOwner(User user) {
+		this.bookmarkRepository.deleteAllByOwner(user);
+		
+	}
+	
+	@Transactional
+	public void deleteByTargetAndOwner(Experience exp, User user) {
+		this.bookmarkRepository.deleteByTargetAndOwner(exp, user);
+	}
 	
 }

@@ -46,3 +46,12 @@ body{
 .bm-link :hover{
 	color: #007bff;
 }
+
+.bm-rm-icon{
+	font-size: 2rem;
+	color:  #007bff;
+}
+
+.bm-rm-link :hover{
+	color: #dc3545;
+}

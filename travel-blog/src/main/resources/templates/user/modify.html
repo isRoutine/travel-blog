@@ -3,6 +3,7 @@
 <head>
 	<meta charset="UTF-8" />
 	<title>Modifica Profilo</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 
 	<!-- Icon -->
 	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -30,8 +31,8 @@
 	                  
 					  <h1 class="form-text text-muted mb-3"><b>Modifica Profilo</b></h1>
 						
-					  <div class="form-row d-flex justify-content-around">
-					  	<div th:if="*{img != null}" class="form-group col-sm-5">
+					  <div class="form-row d-flex justify-content-center">
+					  	<div th:if="*{img != null}" class="form-group col-sm-auto">
 							<img class="img-thumbnail bg-light row rounded shadow m-1" th:src="@{'/images/' + *{getDirectoryName()} + '/' + *{img}}"></img>
 							<a class="btn btn-sm btn-outline-danger row m-2 mr-2" th:href="@{'/user/delete/image/' + *{id}}" >Rimuovi</a>
 						</div>	

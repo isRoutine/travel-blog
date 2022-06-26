@@ -3,8 +3,8 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="it">
 <head>
 	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Travel-blog</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 	
 	<!-- Icon -->
 	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -46,7 +46,8 @@
 		    		<a th:href="@{'/profile/' + ${experience.user.id}}" class="text-muted profile-name m-3 flex-grow-1" th:text="|${experience.user.name} ${experience.user.surname}|"></a>		    	
 		    		<p th:text="${experience.creationTime.toString().substring(0,10)}" class="card-text text-muted font-weight-bold align-self-center mr-2 mt-2">Data</p>
 		    		
-		    		<a sec:authorize="isAuthenticated()" th:href="@{'/add/bookmark/' + ${experience.id}}" class="bm-link"><span class="material-icons bm-icon">bookmark_add</span></a>		    	
+		    		<a sec:authorize="isAuthenticated()" th:if="${!bookmarks.contains(experience)}" th:href="@{'/bookmark/add/' + ${experience.id}}" class="bm-link"><span class="material-icons bm-icon">bookmark_add</span></a>
+		    		<a sec:authorize="isAuthenticated()" th:if="${bookmarks.contains(experience)}" th:href="@{'/bookmark/delete/byExp/' + ${experience.id}}" class="bm-rm-link"><span class="material-icons bm-rm-icon">bookmark_added</span></a>
 		    		
 		    	</div>	
 			
