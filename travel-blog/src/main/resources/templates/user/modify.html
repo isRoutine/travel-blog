@@ -28,6 +28,7 @@
 	        	<form class="" th:action = "@{/user/modify}" method="post" th:object="${user}" enctype="multipart/form-data">
 				  
 				  	  <input type="hidden" th:field="*{id}">
+				  	  <input type="hidden" th:field="*{img}">
 	                  
 					  <h1 class="form-text text-muted mb-3"><b>Modifica Profilo</b></h1>
 						
