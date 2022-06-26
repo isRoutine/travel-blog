@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html  xmlns:th="http://www.thymeleaf.org">
 <head>
 		<meta charset="UTF-8" />
 		<title>Dettagli user</title>
@@ -47,9 +47,9 @@
 			          <div class="mb-1 text-muted" th:text="${user.email}">travelblog@email.com</div>
 			          <div class="mb-1 text-muted" th:text="${user.birthDate}">01/01/01</div>
 			          <div th:if="${me == user.id}" class="mt-3" role="group">
-			          	<a  th:href="@{/user/modify}"  class="btn btn-sm btn-outline-primary">Modifica Profilo</a>	
-			          	<a  th:href="@{'/user/delete/' + ${user.id}}"  class="btn btn-sm btn-outline-danger">Elimina Profilo</a>	
-			          	<a  th:href="@{/experience/add}" href="/" class="btn btn-sm btn-outline-success">Aggiungi Esperienza</a>
+			          	<a sec:authorize="!hasRole('USER')" th:href="@{/user/modify}"  class="btn btn-sm btn-outline-primary">Modifica Profilo</a>	
+			          	<a sec:authorize="!hasRole('USER')" th:href="@{'/user/delete/' + ${user.id}}"  class="btn btn-sm btn-outline-danger">Elimina Profilo</a>	
+			          	<a th:href="@{/experience/add}" href="/" class="btn btn-sm btn-outline-success">Aggiungi Esperienza</a>
 			          </div>
 			        </div>
 			      </div>
