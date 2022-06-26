@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -46,7 +45,7 @@ public class User {
 	
 	@OneToMany(mappedBy = "user")
 	private List<Experience> experiences;
-	
+		
 	
 	public User() {
 		this.experiences = new ArrayList<Experience>();

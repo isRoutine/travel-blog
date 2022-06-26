@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8" />
+	<title>Modifica Profilo</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<!-- Icon -->
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	
+  	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
+	<link rel="stylesheet" href="/css/userModify.css">
+	<link rel="stylesheet" href="/css/base.css">
+	
+	<!-- Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&family=Tinos&display=swap" rel="stylesheet">
+	
+</head>
+<body>
+	<!-- Navbar Fragment -->
+	<header th:replace="fragments/base.html :: navbar"></header>
+		
+	<div class="page container-fluid">
+  		  <div class="form shadow-lg p-3 mb-5 bg-light">
+	        	<form class="" th:action = "@{/user/modify}" method="post" th:object="${user}" enctype="multipart/form-data">
+				  
+				  	  <input type="hidden" th:field="*{id}">
+	                  
+					  <h1 class="form-text text-muted mb-3"><b>Modifica Profilo</b></h1>
+						
+					  <div class="form-row d-flex justify-content-center">
+					  	<div th:if="*{img != null}" class="form-group col-sm-auto">
+							<img class="img-thumbnail bg-light row rounded shadow m-1" th:src="@{'/images/' + *{getDirectoryName()} + '/' + *{img}}"></img>
+							<a class="btn btn-sm btn-outline-danger row m-2 mr-2" th:href="@{'/user/delete/image/' + *{id}}" >Rimuovi</a>
+						</div>	
+					  </div>
+					
+	                  <div class="form-group">
+	                  	<label class="form-label" for="form3Example1c">Nome</label>
+	                    <input type="text" th:field="*{name}" class="form-control" />
+	                    <div class="alert alert-danger mt-2" role="alert" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+	                  </div>
+	
+	                  <div class="form-group">
+	                  	<label class="form-label" for="form3Example1c">Cognome</label>
+	                    <input type="text" th:field="*{surname}" class="form-control" />
+	                    <div class="alert alert-danger mt-2" role="alert" th:if="${#fields.hasErrors('surname')}" th:errors="*{surname}"></div>
+	                  </div>
+	
+	                  <div class="form-group">
+	                  	<label class="form-label" for="form3Example1c">Data di nascita</label>
+	                    <input type="date" th:field="*{birthDate}" class="form-control" />
+	                  </div>
+	
+	                  <div class="form-group">
+	                  	<label class="form-label" for="form3Example1c">Email</label>
+	                    <input type="text" th:field="*{email}" class="form-control" />
+	                    <div class="alert alert-danger mt-2" role="alert" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+	                  </div>
+	                  
+	                  <div class="form-row d-flex justify-content-start m-4">
+			      		<label for="inputImg">Immagine</label>
+			     		<input class="form-control-file" type="file" id="inputImg" name="file">
+			   	      </div>
+									
+	                  <div class="form-group">
+	                  	<a href="/profile" class="btn btn-sm btn-danger btn-lg">Annulla</a>
+	                    <button type="submit" class="btn btn-sm btn-primary btn-lg">Conferma</button>
+	                  </div>
+					
+	             </form>
+           	</div>
+       </div>
+          
+      <!-- Footer -->
+	  <footer th:replace="fragments/base.html :: footer"></footer>
+		
+	  <!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->
+	  <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+	  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF" crossorigin="anonymous"></script>
+
+</body>
+</html>

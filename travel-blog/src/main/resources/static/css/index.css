@@ -1,9 +1,14 @@
+body{
+	font-family: 'Roboto', sans-serif;
+	font-family: 'Tinos', serif;
+}
+
 .main-row{
-	height: 20vw;
+	height: 30vw;
  	background-size: cover;
   	background-position: center;
   	background-repeat: no-repeat;
-  	background-image: linear-gradient(rgba(100, 100, 100, 0.4), rgba(100, 100, 100, 0.4)), url("/images/default/profileBg.jpg");
+  	background-image: linear-gradient(rgba(100, 100, 100, 0.4), rgba(100, 100, 100, 0.4)), url("/images/default/indexBg.jpg");
   	display: flex;
 }
 
@@ -19,4 +24,34 @@
 	text-align: center;
 	border-bottom: 3px solid #fff;
 	
+}
+
+.badge{
+	font-size: 1rem;
+}
+
+.user-img{
+	width: 0.5rem;
+}
+
+.profile-name{
+	font-size: 1.5rem;
+}
+
+.bm-icon{
+	font-size: 2rem;
+	color: #6c757d;
+}
+
+.bm-link :hover{
+	color: #007bff;
+}
+
+.bm-rm-icon{
+	font-size: 2rem;
+	color:  #007bff;
+}
+
+.bm-rm-link :hover{
+	color: #dc3545;
 }

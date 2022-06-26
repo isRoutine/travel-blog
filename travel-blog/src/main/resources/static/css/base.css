@@ -24,14 +24,11 @@ header{
 	color: SandyBrown !important;
 }
 
-.bi-basket2-fill{
-	color: WhiteSmoke;
-	width: 2rem;
-	margin-top: 0.7rem;
-	margin-right: 1rem;
+.icon{
+	font-size: 2.5rem;
 }
 
-.bi-basket2-fill :hover{
+.navbar-brand :hover{
 	color: SandyBrown;
 }
 
@@ -56,6 +53,10 @@ header{
 	.nav-item .nav-link{
 		padding-left: 1%;
 		font-size: 1.5rem;
+	}
+	
+	.navbar{
+	background-color: rgba(0,0,0,0.7);
 	}
 }
 

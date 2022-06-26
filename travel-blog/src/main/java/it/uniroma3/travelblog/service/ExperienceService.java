@@ -52,9 +52,9 @@ public class ExperienceService {
 	public void deleteById(Long id) {
 		this.expRepo.deleteById(id);
 	}
-	
-	public boolean existByUserAndDescription(Experience exp) {
-		return this.expRepo.existsByUserAndDescription(exp.getUser(), exp.getDescription());
+
+	public boolean existByName(Experience experience) {
+		return this.expRepo.existsByName(experience.getName());
 	}
 	
 }

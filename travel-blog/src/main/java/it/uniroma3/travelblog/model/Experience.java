@@ -40,6 +40,7 @@ public class Experience{
 	@ManyToOne
 	private User user;
 	
+	
 	public Experience() {
 		this.imgs = new String[MAX_IMGS];
 	}
@@ -101,6 +102,7 @@ public class Experience{
 		this.name = name;
 	}
 	
+
 	public void emptyImgs() {
 		this.imgs = new String[MAX_IMGS];
 	}
@@ -114,6 +116,7 @@ public class Experience{
 	public String getDirectoryName() {
 		return this.user.getDirectoryName() + "/exp" + this.getId();
 	}
+	
 
 	@Override
 	public int hashCode() {

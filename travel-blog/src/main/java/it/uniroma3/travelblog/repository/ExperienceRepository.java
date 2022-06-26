@@ -7,6 +7,6 @@ import it.uniroma3.travelblog.model.User;
 
 public interface ExperienceRepository extends CrudRepository<Experience, Long>{
 
-	public boolean existsByUserAndDescription(User user, String description);
+	public boolean existsByName(String name);
 	
 }
