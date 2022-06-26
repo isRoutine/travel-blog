@@ -45,22 +45,7 @@ public class TravelBlogController {
 		return experiences;
 	}	
 	
-	
-	/**Primo metodo da invocare per ottenere la home page**/
-	@GetMapping("/")
-	public String getExperiencesHome(Model model) {
-		List<Experience> experiences = this.getSortedExperiences();
-		
-		int expSize = experiences.size();
-		int limit = EXP_FOR_PAGE;
-		if(experiences.size() < EXP_FOR_PAGE)
-			limit = expSize;
-		
-		boolean hasNext = false;
-		
-		if(expSize > (0*EXP_FOR_PAGE)+EXP_FOR_PAGE)
-			hasNext = true;
-		
+	private void setupUserInfo(Model model) {
 		User user;
 		try {
 			try { // loggato normalmente
@@ -88,12 +73,33 @@ public class TravelBlogController {
         	model.addAttribute("likes", liked);
 			
 		} catch(Exception e){}
+	}
+	
+	/**Primo metodo da invocare per ottenere la home page**/
+	@GetMapping("/")
+	public String getExperiencesHome(Model model) {
+		List<Experience> experiences = this.getSortedExperiences();
+		
+		int expSize = experiences.size();
+		int limit = EXP_FOR_PAGE;
+		if(experiences.size() < EXP_FOR_PAGE)
+			limit = expSize;
+		
+		boolean hasNext = false;
+		
+		if(expSize > (0*EXP_FOR_PAGE)+EXP_FOR_PAGE)
+			hasNext = true;
+		
+		setupUserInfo(model);
     	
 		model.addAttribute("currPage", 0);
 		model.addAttribute("experiences", experiences.subList(0, limit));
 		model.addAttribute("hasNext", hasNext);
 		return "index";
 	}
+
+
+	
 	
 	/**Metodo da invocare per ottenere il caricamento delle esperienze della pagina successiva**/
 	@GetMapping("/next/{page}")
@@ -112,6 +118,8 @@ public class TravelBlogController {
 		if(expSize > (currPage*EXP_FOR_PAGE)+EXP_FOR_PAGE)
 			hasNext = true;
 		
+		setupUserInfo(model);
+		
 		model.addAttribute("experiences", experiences.subList(currPage*EXP_FOR_PAGE, limit));			
 		model.addAttribute("currPage", currPage);
 		model.addAttribute("hasNext", hasNext);
@@ -124,6 +132,8 @@ public class TravelBlogController {
 	public String getPrevExperiences(@PathVariable("page") Integer page, Model model) {
 		List<Experience> experiences = getSortedExperiences();
 		Integer currPage = page-1;
+		
+		setupUserInfo(model);
 		
 		model.addAttribute("currPage", currPage);
 		model.addAttribute("experiences", experiences.subList(currPage*EXP_FOR_PAGE, (currPage*EXP_FOR_PAGE)+EXP_FOR_PAGE));
