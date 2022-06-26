@@ -190,12 +190,12 @@ public class AuthController {
 	    	String username = ((UserDetails)principal).getUsername();
 	    	Credentials credentials = this.credentialsService.findByUsername(username);
 			model.addAttribute("me", credentials.getUser().getId());
-			model.addAttribute("experiences", credentials.getUser().getExperiences());
+			model.addAttribute("experiences",  userService.findById(id).getExperiences());
     	} catch(Exception e) {
         	OAuth2User userDetails = (OAuth2User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         	String email = userDetails.getAttribute("email");
         	model.addAttribute("me", this.userService.findByEmail(email).getId());
-        	model.addAttribute("experiences", this.userService.findByEmail(email).getExperiences());
+        	model.addAttribute("experiences",  userService.findById(id).getExperiences());
     	}
 		
 		
