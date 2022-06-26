@@ -16,10 +16,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import it.uniroma3.travelblog.model.Bookmark;
 import it.uniroma3.travelblog.model.Credentials;
 import it.uniroma3.travelblog.model.Experience;
+import it.uniroma3.travelblog.model.Like;
 import it.uniroma3.travelblog.model.User;
 import it.uniroma3.travelblog.service.BookmarkService;
 import it.uniroma3.travelblog.service.CredentialsService;
 import it.uniroma3.travelblog.service.ExperienceService;
+import it.uniroma3.travelblog.service.LikeService;
 import it.uniroma3.travelblog.service.UserService;
 
 @Controller
@@ -30,6 +32,7 @@ public class TravelBlogController {
 	@Autowired private CredentialsService credentialsService;
 	@Autowired private UserService userService;
 	@Autowired private BookmarkService bookmarkService;
+	@Autowired private LikeService likeService;
 	
 	private List<Experience> getSortedExperiences() {
 		List<Experience> experiences = this.expService.findAll();
@@ -64,12 +67,18 @@ public class TravelBlogController {
 				UserDetails userDetails = (UserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		    	Credentials credentials = credentialsService.findByUsername(userDetails.getUsername());	
 	        	user = credentials.getUser();
-	        	List<Experience> exps = new ArrayList<Experience>();
+	        	List<Experience> booked = new ArrayList<Experience>();
 	        	for(Bookmark b : this.bookmarkService.findAllByUser(user)) {
-	        		exps.add(b.getTarget());
+	        		booked.add(b.getTarget());
 	        	}
 	        	
-	        	model.addAttribute("bookmarks", exps);
+	        	List<Experience> liked = new ArrayList<Experience>();
+	        	for(Like l : this.likeService.findAllByUser(user)) {
+	        		liked.add(l.getTarget());
+	        	}
+	        	
+	        	model.addAttribute("bookmarks", booked);
+	        	model.addAttribute("likes", liked);
 	        	
 	    	} catch(Exception e){ // loggato con oauth
 	        	OAuth2User userDetails = (OAuth2User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();

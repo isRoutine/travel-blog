@@ -26,6 +26,7 @@ import it.uniroma3.travelblog.model.User;
 import it.uniroma3.travelblog.presentation.FileStorer;
 import it.uniroma3.travelblog.service.BookmarkService;
 import it.uniroma3.travelblog.service.CredentialsService;
+import it.uniroma3.travelblog.service.LikeService;
 import it.uniroma3.travelblog.service.UserService;
 
 @Controller
@@ -45,6 +46,9 @@ public class AuthController {
 	
 	@Autowired
 	private BookmarkService bookmarkService;
+	
+	@Autowired
+	private LikeService likeService;
 
 	
 	@GetMapping("/register")
@@ -116,6 +120,7 @@ public class AuthController {
 		Credentials credentials = this.credentialsService.findByUser(user);
 		
 		this.bookmarkService.deleteAllByOwner(user);
+		this.likeService.deleteAllByOwner(user);
 		
 		try { // evito il caso in cui non sia stata creata la directory per questo user
 			// nel caso in cui non avesse ancora inserito esperienze

@@ -55,3 +55,21 @@ body{
 .bm-rm-link :hover{
 	color: #dc3545;
 }
+
+.lk-icon{
+	font-size: 2rem;
+	color: #6c757d;
+}
+
+.lk-link :hover{
+	color: #dc3545;
+}
+
+.lk-rm-icon{
+	font-size: 2rem;
+	color:  #dc3545;
+}
+
+.lk-rm-link :hover{
+	color: #6c757d;
+}
