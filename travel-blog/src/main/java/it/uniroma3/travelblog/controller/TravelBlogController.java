@@ -67,24 +67,25 @@ public class TravelBlogController {
 				UserDetails userDetails = (UserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		    	Credentials credentials = credentialsService.findByUsername(userDetails.getUsername());	
 	        	user = credentials.getUser();
-	        	List<Experience> booked = new ArrayList<Experience>();
-	        	for(Bookmark b : this.bookmarkService.findAllByUser(user)) {
-	        		booked.add(b.getTarget());
-	        	}
-	        	
-	        	List<Experience> liked = new ArrayList<Experience>();
-	        	for(Like l : this.likeService.findAllByUser(user)) {
-	        		liked.add(l.getTarget());
-	        	}
-	        	
-	        	model.addAttribute("bookmarks", booked);
-	        	model.addAttribute("likes", liked);
 	        	
 	    	} catch(Exception e){ // loggato con oauth
 	        	OAuth2User userDetails = (OAuth2User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 	        	String email = userDetails.getAttribute("email");
 	        	user = userService.findByEmail(email);
-	    	} 
+	    	}
+			
+        	List<Experience> booked = new ArrayList<Experience>();
+        	for(Bookmark b : this.bookmarkService.findAllByUser(user)) {
+        		booked.add(b.getTarget());
+        	}
+        	
+        	List<Experience> liked = new ArrayList<Experience>();
+        	for(Like l : this.likeService.findAllByUser(user)) {
+        		liked.add(l.getTarget());
+        	}
+        	
+        	model.addAttribute("bookmarks", booked);
+        	model.addAttribute("likes", liked);
 			
 		} catch(Exception e){}
     	
