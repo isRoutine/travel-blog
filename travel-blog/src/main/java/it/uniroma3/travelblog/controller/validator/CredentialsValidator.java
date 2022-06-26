@@ -1,4 +1,4 @@
-package it.uniroma3.travelblog.validator;
+package it.uniroma3.travelblog.controller.validator;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -27,17 +27,18 @@ public class CredentialsValidator implements Validator {
         String username = credentials.getUsername().trim();
         String password = credentials.getPassword().trim();
 
-        if (username.isEmpty())
-            errors.rejectValue("username", "required");
-        else if (username.length() < MIN_USERNAME_LENGTH || username.length() > MAX_USERNAME_LENGTH)
-            errors.rejectValue("username", "size");
-        else if (this.credentialsService.findByUsername(username) != null)
-            errors.rejectValue("username", "duplicate");
+        if (username.length() < MIN_USERNAME_LENGTH || username.length() > MAX_USERNAME_LENGTH)
+        	errors.rejectValue("username", "username.size");
+        
 
-        if (password.isEmpty())
-            errors.rejectValue("password", "required");
-        else if (password.length() < MIN_PASSWORD_LENGTH || password.length() > MAX_PASSWORD_LENGTH)
-            errors.rejectValue("password", "size");
+        if (password.length() < MIN_PASSWORD_LENGTH || password.length() > MAX_PASSWORD_LENGTH)
+        	errors.rejectValue("password", "password.size");
+        
+        if (credentials.getId() == null || !credentials.getUsername().equals(this.credentialsService.findById(credentials.getId()).getUsername())) {
+        	if (this.credentialsService.findByUsername(username) != null)
+        		errors.rejectValue("username", "username.duplication");
+        }
+        
     }
 
     @Override

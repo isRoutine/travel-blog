@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -46,12 +47,13 @@ public class User {
 	@OneToMany(mappedBy = "user")
 	private List<Experience> experiences;
 	
-	@OneToMany
-	private List<Experience> bookmarks;
+	@OneToMany(mappedBy = "owner", cascade = CascadeType.REMOVE)
+	private List<Bookmark> bookmarks;
 	
 	
 	public User() {
 		this.experiences = new ArrayList<Experience>();
+		this.bookmarks = new ArrayList<Bookmark>();
 	}
 
 	public Long getId() {
@@ -101,13 +103,12 @@ public class User {
 	public void setExperiences(List<Experience> experiences) {
 		this.experiences = experiences;
 	}
-	
 
-	public List<Experience> getBookmarks() {
+	public List<Bookmark> getBookmarks() {
 		return bookmarks;
 	}
 
-	public void setBookmarks(List<Experience> bookmarks) {
+	public void setBookmarks(List<Bookmark> bookmarks) {
 		this.bookmarks = bookmarks;
 	}
 

@@ -19,13 +19,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import it.uniroma3.travelblog.controller.validator.CredentialsValidator;
+import it.uniroma3.travelblog.controller.validator.UserValidator;
 import it.uniroma3.travelblog.model.Credentials;
 import it.uniroma3.travelblog.model.User;
 import it.uniroma3.travelblog.presentation.FileStorer;
 import it.uniroma3.travelblog.service.CredentialsService;
 import it.uniroma3.travelblog.service.UserService;
-import it.uniroma3.travelblog.validator.CredentialsValidator;
-import it.uniroma3.travelblog.validator.UserValidator;
 
 @Controller
 public class AuthController {
@@ -95,8 +95,10 @@ public class AuthController {
         	credentials.setUser(user);
             credentialsService.save(credentials);
             
-        	user.setImg(FileStorer.store(file, user.getDirectoryName()));
-        	userService.save(user);
+            if(!file.isEmpty()) {
+            	user.setImg(FileStorer.store(file, user.getDirectoryName()));
+            	userService.save(user);
+            }
             
             return "registrationSuccessful";
         }
@@ -124,7 +126,7 @@ public class AuthController {
 		credentials.getUser().setImg(null);			
 		credentialsService.update(credentials);
 		
-		return this.getProfile(model);
+		return this.modifyUser(model);
 	}
     
     
@@ -146,27 +148,55 @@ public class AuthController {
 	    	Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 	    	String username = ((UserDetails)principal).getUsername();
 	    	Credentials credentials = this.credentialsService.findByUsername(username);
-			model.addAttribute("user", credentials.getUser());  
+			model.addAttribute("user", credentials.getUser());
+			model.addAttribute("me", credentials.getUser().getId());  
         	model.addAttribute("experiences", credentials.getUser().getExperiences());
     	} catch(Exception e) {
         	OAuth2User userDetails = (OAuth2User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         	String email = userDetails.getAttribute("email");
-        	model.addAttribute("user",this.userService.findByEmail(email));  
+        	model.addAttribute("user",this.userService.findByEmail(email)); 
+        	model.addAttribute("me", this.userService.findByEmail(email).getId());   
         	model.addAttribute("experiences", this.userService.findByEmail(email).getExperiences());
     	}
     	return "profile";
     }
-    
+	
     @GetMapping("/profile/{id}")
     public String getProfile(@PathVariable("id") Long id, Model model) {
 		model.addAttribute("user", userService.findById(id));
+		
+		try {
+	    	Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+	    	String username = ((UserDetails)principal).getUsername();
+	    	Credentials credentials = this.credentialsService.findByUsername(username);
+			model.addAttribute("me", credentials.getUser().getId());
+			model.addAttribute("experiences", credentials.getUser().getExperiences());
+    	} catch(Exception e) {
+        	OAuth2User userDetails = (OAuth2User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        	String email = userDetails.getAttribute("email");
+        	model.addAttribute("me", this.userService.findByEmail(email).getId());
+        	model.addAttribute("experiences", this.userService.findByEmail(email).getExperiences());
+    	}
+		
+		
     	return "profile";
     }
     
-    @PostMapping("/profile/modify")
-	public String updateChef(@ModelAttribute("credentials")Credentials credentials, @RequestParam("file")MultipartFile file, BindingResult bindingResult, Model model) {
+    @GetMapping("/user/modify")
+    public String modifyUser(Model model) {
+    	
+    	Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    	String username = ((UserDetails)principal).getUsername();
+    	Credentials credentials = this.credentialsService.findByUsername(username);
+    	
+		model.addAttribute("credentials", credentials);
+    	return "/user/modify";
+    }
+    
+    @PostMapping("/user/modify")
+	public String updateProfile(@ModelAttribute("credentials") Credentials credentials, BindingResult bindingResult,@RequestParam("file")MultipartFile file, Model model) {
     	this.userValidator.validate(credentials.getUser(), bindingResult);
-    	this.credentialsValidator.validate(credentials, bindingResult);
+        this.credentialsValidator.validate(credentials, bindingResult);
 		
     	if(!bindingResult.hasErrors()) {
 			FileStorer.dirRename(credentialsService.findById(credentials.getId()).getDirectoryName() , credentials.getDirectoryName());

@@ -4,13 +4,23 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>Travel-blog home page</title>
+	<title>Travel-blog</title>
+	
+	<!-- Icon -->
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+	<!-- Bootstrap CSS -->
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
 	<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF" crossorigin="anonymous"></script>
 	<link rel="stylesheet" href="/css/base.css">
 	<link rel="stylesheet" href="/css/index.css">
-
+	
+	<!-- Font -->
+  	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&family=Tinos&display=swap" rel="stylesheet">
+	
 
 </head>
 <body>
@@ -30,12 +40,14 @@
 		
 		<div class="card shadow">
 			<div class="container px-0">		    	
-		    	<div class="container d-flex align-items-center mx-3 my-3">
-		    		<img src="/images/blue.jpeg" class="rounded-circle" style ="width:5rem" alt="...">
-		    		<a th:href="@{'/profile/' + ${experience.user.id}}" class="btn btn-outline-primary my-2 mx-5" th:text="|${experience.user.name} ${experience.user.surname}|"></a>		    	
-		    		<div class="col border mx-5 d-flex justify-content-end">
-		    			<a th:href="@{'/add/bookmark/' + ${experience.id}}" class="btn btn-primary">Bookmark</a>		    	
-		    		</div>
+		    	<div class="container d-flex align-items-center m-2">
+		    		<img th:if="${experience.user.img}"  th:src="@{'/images/' + ${experience.user.getDirectoryName()} + '/' + ${experience.user.img}}" class="rounded-circle" style ="width:5rem" alt="...">
+		    		<img th:if="${experience.user.img == null}"  src="/images/default/profile.png" class="rounded-circle" style ="width:5rem" alt="...">
+		    		<a th:href="@{'/profile/' + ${experience.user.id}}" class="text-muted profile-name m-3 flex-grow-1" th:text="|${experience.user.name} ${experience.user.surname}|"></a>		    	
+		    		<p th:text="${experience.creationTime.toString().substring(0,10)}" class="card-text text-muted font-weight-bold align-self-center mr-2 mt-2">Data</p>
+		    		
+		    		<a sec:authorize="isAuthenticated()" th:href="@{'/add/bookmark/' + ${experience.id}}" class="bm-link"><span class="material-icons bm-icon">bookmark_add</span></a>		    	
+		    		
 		    	</div>	
 			
 				<div th:id=" 'carouselExampleControls' + ${experience.id}" class="carousel slide" data-ride="carousel">
@@ -61,15 +73,11 @@
 				</div>			
 			
 			</div>
-		    	<div class="container d-flex mb-0 p-1  justify-content-center bg-primary text-white font-weight-light">
-		    		<div th:text="|${experience.location.city},${experience.location.country}|"></div>
-		    	</div>			
+		   			
 		  	<div class="card-body">
+		  		<span class="badge badge-secondary card-text float-right p-2" th:text="|${experience.location.country} - ${experience.location.city}|"></span>	
 		    	<h3 th:text="${experience.name}"class="card-title">Card title</h3>
 		    	<p th:text="${experience.description}" class="card-text">Descrizione</p>
-		    	<div class="container d-flex justify-content-end">
-		    		<p th:text="${experience.creationTime.toString().substring(0,10)}" class="card-text text-muted font-weight-bold">Data</p>		    	
-		    	</div>	
 		  	</div>
 		</div>
 	</div>
