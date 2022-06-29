@@ -1,7 +1,6 @@
 package it.uniroma3.travelblog.controller;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,13 +34,14 @@ public class TravelBlogController {
 	@Autowired private LikeService likeService;
 	
 	private List<Experience> getSortedExperiences() {
-		List<Experience> experiences = this.expService.findAll();
-		experiences.sort(new Comparator<Experience>() {
-			@Override
-			public int compare(Experience o1, Experience o2) {
-				return -o1.getCreationTime().compareTo(o2.getCreationTime());
-			}
-		});
+//		List<Experience> experiences = this.expService.findAll();
+//		experiences.sort(new Comparator<Experience>() {
+//			@Override
+//			public int compare(Experience o1, Experience o2) {
+//				return -o1.getCreationTime().compareTo(o2.getCreationTime());
+//			}
+//		});
+		List<Experience> experiences = this.expService.findSortedExperiences();	
 		return experiences;
 	}	
 	

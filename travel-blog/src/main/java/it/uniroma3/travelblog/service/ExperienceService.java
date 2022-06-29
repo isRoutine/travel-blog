@@ -56,5 +56,14 @@ public class ExperienceService {
 	public boolean existByName(Experience experience) {
 		return this.expRepo.existsByName(experience.getName());
 	}
+
+	public List<Experience> findSortedExperiences() {
+		// TODO Auto-generated method stub
+		return this.expRepo.findAllByOrderByCreationTimeDesc();
+	}
+	
+	public long count() {
+		return this.expRepo.count();
+	}
 	
 }
