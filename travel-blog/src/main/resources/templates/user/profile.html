@@ -48,7 +48,7 @@
 			          <div class="mb-1 text-muted" th:text="${user.birthDate}">01/01/01</div>
 			          <div th:if="${me == user.id}" class="mt-3" role="group">
 			          	<a sec:authorize="!hasRole('USER')" th:href="@{/user/modify}"  class="btn btn-sm btn-outline-primary">Modifica Profilo</a>	
-			          	<a sec:authorize="!hasRole('USER')" th:href="@{'/user/delete/' + ${user.id}}"  class="btn btn-sm btn-outline-danger">Elimina Profilo</a>	
+			          	<a sec:authorize="!hasRole('USER')" th:href="@{'/user/delete/' + ${user.id}}"  class="btn btn-sm btn-outline-danger">Elimina Profilo</a>				          	
 			          	<a th:href="@{/experience/add}" href="/" class="btn btn-sm btn-outline-success">Aggiungi Esperienza</a>
 			          </div>
 			        </div>
@@ -81,7 +81,9 @@
 				    			<h5 class="card-text text-muted" th:text="${experience.creationTime.toString().substring(0,10)}">Data esperienza</h5>
 		    					<div th:if="${me == user.id}" >
     								<a th:href="@{'/experience/delete/' + ${experience.id}}" class="btn btn-sm btn-outline-danger">Elimina</a>
-				                  	<a  sec:authorize="!hasRole('USER')" th:href="@{'/experience/modify/' + ${experience.id}}" class="btn btn-sm btn-outline-secondary">Modifica</a>
+<!-- 				                  	<a  sec:authorize="!hasRole('USER')" th:href="@{'/experience/modify/' + ${experience.id}}" class="btn btn-sm btn-outline-secondary">Modifica</a> -->
+				                  	<a  sec:authorize="isAuthenticated()" th:href="@{'/experience/modify/' + ${experience.id}}" class="btn btn-sm btn-outline-secondary">Modifica</a>
+				                
 				                </div>
 		  					</div>
 						</div>	

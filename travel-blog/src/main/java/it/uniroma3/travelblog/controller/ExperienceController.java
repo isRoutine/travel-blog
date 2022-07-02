@@ -129,6 +129,23 @@ public class ExperienceController {
 	@GetMapping("/modify/{id}")
 	public String experienceModify(@PathVariable("id") Long id, Model model) {
 		Experience oldExperience =  this.expService.findById(id);
+		
+    	User user;
+    	try { // loggato normalmente
+			UserDetails userDetails = (UserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+	    	Credentials credentials = credentialsService.findByUsername(userDetails.getUsername());	
+        	user = credentials.getUser();
+        	
+    	} catch(Exception e){ // loggato con oauth
+        	OAuth2User userDetails = (OAuth2User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        	String email = userDetails.getAttribute("email");
+        	user = userService.findByEmail(email);
+    	} 
+    	
+    	if(! (oldExperience.getUser().getId() == user.getId()))
+    		return "redirect:/";
+				
+		
 		model.addAttribute("experience", oldExperience);
 		return "experience/modify";
 	}
@@ -146,7 +163,26 @@ public class ExperienceController {
 	
 	@GetMapping("/delete/{id}")
 	public String deleteExperience(@PathVariable("id") Long id, Model model) {
+		
 		Experience exp = this.expService.findById(id);
+		
+    	User user;
+    	try { // loggato normalmente
+			UserDetails userDetails = (UserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+	    	Credentials credentials = credentialsService.findByUsername(userDetails.getUsername());	
+        	user = credentials.getUser();
+        	
+    	} catch(Exception e){ // loggato con oauth
+        	OAuth2User userDetails = (OAuth2User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        	String email = userDetails.getAttribute("email");
+        	user = userService.findByEmail(email);
+    	} 
+    	
+    	if(! (exp.getUser().getId() == user.getId()))
+    		return "redirect:/";
+		
+		
+
 		FileStorer.removeImgsAndDir(exp.getDirectoryName(), exp.getImgs());
 		
 		this.bookmarkService.deleteAllByTarget(exp);
